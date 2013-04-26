@@ -1,0 +1,17 @@
+﻿<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+     <package namespace="/jsp/crm" name="document" extends="default">
+    	<action name="listDocumentPage" class="listDocumentAction" method="listFull">
+    	  <result name="success">/jsp/crm/documents.jsp</result>
+        </action>
+
+        <action name="getDocument" class="editDocumentAction" method="get">
+			<interceptor-ref name="prepareInterceptor" /> 
+			<result>/jsp/crm/document.jsp</result>
+        </action>
+  </package>      
+    
+</struts>

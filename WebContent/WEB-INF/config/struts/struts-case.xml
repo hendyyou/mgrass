@@ -1,0 +1,17 @@
+﻿<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+     <package namespace="/jsp/crm" name="case" extends="default">
+    	<action name="listCasePage" class="listCaseAction" method="listFull">
+    	  <result name="success">/jsp/crm/cases.jsp</result>
+        </action>
+
+        <action name="getCase" class="editCaseAction" method="get">
+			<interceptor-ref name="prepareInterceptor" /> 
+			<result>/jsp/crm/case.jsp</result>
+        </action>
+  </package>      
+    
+</struts>

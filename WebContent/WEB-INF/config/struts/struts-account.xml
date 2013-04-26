@@ -1,0 +1,26 @@
+﻿<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+     <package namespace="/jsp/crm" name="account" extends="default">
+     
+	    <action name="totalfilter" class="totalfilterAction" method="execute">  
+	        <result name="url" >${url}</result>           
+	    </action>  
+	         
+         <action name="homePage" class="homeAction" method="load">
+    	  <result name="success">/jsp/crm/home.jsp</result>
+        </action>
+        
+    	<action name="listAccountPage" class="listAccountAction" method="listFull">
+    	  <result name="success">/jsp/crm/accounts.jsp</result>
+        </action>
+
+        <action name="getAccount" class="editAccountAction" method="get">
+			<interceptor-ref name="prepareInterceptor" /> 
+			<result>/jsp/crm/account.jsp</result>
+        </action>                
+  </package>      
+    
+</struts>

@@ -1,0 +1,17 @@
+﻿<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+     <package namespace="/jsp/crm" name="campaign" extends="default">
+    	<action name="listCampaignPage" class="listCampaignAction" method="listFull">
+    	  <result name="success">/jsp/crm/campaigns.jsp</result>
+        </action>
+
+        <action name="getCampaign" class="editCampaignAction" method="get">
+			<interceptor-ref name="prepareInterceptor" /> 
+			<result>/jsp/crm/campaign.jsp</result>
+        </action>
+  </package>      
+    
+</struts>

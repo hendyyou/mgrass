@@ -1,0 +1,17 @@
+﻿<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+     <package namespace="/jsp/crm" name="lead" extends="default">
+    	<action name="listLeadPage" class="listLeadAction" method="listFull">
+    	  <result name="success">/jsp/crm/leads.jsp</result>
+        </action>
+
+        <action name="getLead" class="editLeadAction" method="get">
+			<interceptor-ref name="prepareInterceptor" /> 
+			<result>/jsp/crm/lead.jsp</result>
+        </action>
+  </package>      
+    
+</struts>

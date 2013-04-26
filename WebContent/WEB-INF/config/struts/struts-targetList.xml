@@ -1,0 +1,17 @@
+﻿<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+     <package namespace="/jsp/crm" name="targetList" extends="default">
+    	<action name="listTargetListPage" class="listTargetListAction" method="listFull">
+    	  <result name="success">/jsp/crm/targetLists.jsp</result>
+        </action>
+
+        <action name="getTargetList" class="editTargetListAction" method="get">
+			<interceptor-ref name="prepareInterceptor" /> 
+			<result>/jsp/crm/targetList.jsp</result>
+        </action>
+  </package>      
+    
+</struts>

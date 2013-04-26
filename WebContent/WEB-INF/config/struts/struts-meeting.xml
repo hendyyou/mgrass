@@ -1,0 +1,17 @@
+﻿<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+     <package namespace="/jsp/crm" name="meeting" extends="default">
+    	<action name="listMeetingPage" class="listMeetingAction" method="listFull">
+    	  <result name="success">/jsp/crm/meetings.jsp</result>
+        </action>
+
+        <action name="getMeeting" class="editMeetingAction" method="get">
+			<interceptor-ref name="prepareInterceptor" /> 
+			<result>/jsp/crm/meeting.jsp</result>
+        </action>
+  </package>      
+    
+</struts>

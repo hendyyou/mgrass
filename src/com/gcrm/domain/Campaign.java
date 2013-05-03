@@ -2,6 +2,8 @@ package com.gcrm.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Campaign extends BaseEntity implements Serializable {
 
@@ -23,6 +25,7 @@ public class Campaign extends BaseEntity implements Serializable {
     private String description;
     private String notes;
     private User assigned_to;
+    private Set<TargetList> targetLists = new HashSet<TargetList>(0);
 
     public Campaign() {
         super();
@@ -284,6 +287,21 @@ public class Campaign extends BaseEntity implements Serializable {
      */
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    /**
+     * @return the targetLists
+     */
+    public Set<TargetList> getTargetLists() {
+        return targetLists;
+    }
+
+    /**
+     * @param targetLists
+     *            the targetLists to set
+     */
+    public void setTargetLists(Set<TargetList> targetLists) {
+        this.targetLists = targetLists;
     }
 
 }

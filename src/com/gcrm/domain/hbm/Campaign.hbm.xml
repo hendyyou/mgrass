@@ -34,6 +34,10 @@
   <many-to-one name="updated_by"
 			class="User" column="updated_by" cascade="save-update"/>
   <property name="created_on" column="created_on" type="java.util.Date" />
-  <property name="updated_on" column="updated_on" type="java.util.Date" />  				     			    
+  <property name="updated_on" column="updated_on" type="java.util.Date" />
+  <set cascade="all" name="targetLists" table="campaign_targetList">   
+     <key column="campaign_id" />   
+     <many-to-many class="com.gcrm.domain.TargetList"  column="targetList_id" />
+  </set>   
  </class>
 </hibernate-mapping>

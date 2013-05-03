@@ -18,7 +18,7 @@
 <div id="campaignspage" data-role="page">
 
 <header data-role="header" data-theme="b" data-position="inline">
-  <a href="../menu.jsp" data-icon="arrow-l" data-direction="reverse"><s:text name="link.menu" /></a>
+  <a href="../menu.jsp" data-icon="home" data-direction="reverse"><s:text name="link.menu" /></a>
   <h1><s:text name='title.grid.campaigns'/></h1>
   <a href="../../j_spring_security_logout" data-icon="delete"><s:text name="link.logout" /></a>
 </header>

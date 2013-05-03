@@ -17,9 +17,9 @@
 
 <div data-role="page" id="targetListpage" data-add-back-btn="true">
 <header data-role="header" data-theme="b" data-position="inline">
-  <a href="../menu.jsp" data-icon="arrow-l" data-rel="back" ><s:text name="link.back" /></a>  
+  <a href="<s:url action="listTargetListPage" namespace="/jsp/crm"/>" data-icon="arrow-l" data-rel="back" ><s:text name="link.back" /></a>  
   <h1><s:text name="entity.targetList.label"/>:<s:property value="targetList.name"/></h1>
-  <a href="../../j_spring_security_logout" data-icon="delete"><s:text name="link.logout" /></a>
+  <a href="../menu.jsp" data-icon="home" data-direction="reverse"><s:text name="link.menu" /></a>
 </header>
 
 <div data-role="content" class="content" >
@@ -39,10 +39,6 @@
    <div data-role="collapsible" data-collapsed="false" data-inset="false" data-mini="true" data-theme="b" data-content-theme="d" >
      <h3><s:text name='tab.overview'/></h3>
 	 <ul data-role="listview" data-theme="d" style="margin-bottom: 0" data-inset="false">
-	   <li>
-	     <h3 class="ui-disabled" style="margin:0 inherit"><s:text name="entity.type.label"/>:</h3>
-	     <h3 style="margin-top:0"><s:property value="typeLabel"/></h3>
-       </li>
        <li>
 	     <h3 class="ui-disabled" style="margin:0 inherit"><s:text name="entity.assigned_to.label"/>:</h3>
 	     <h3 style="margin-top:0"><s:property value="assignedToText"/></h3>

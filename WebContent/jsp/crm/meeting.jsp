@@ -17,9 +17,9 @@
 
 <div data-role="page" id="meetingpage" data-add-back-btn="true">
 <header data-role="header" data-theme="b" data-position="inline">
-  <a href="../menu.jsp" data-icon="arrow-l" data-rel="back" ><s:text name="link.back" /></a>  
+  <a href="<s:url action="listMeetingPage" namespace="/jsp/crm"/>" data-icon="arrow-l" data-rel="back" ><s:text name="link.back" /></a>  
   <h1><s:text name="entity.meeting.label"/>:<s:property value="meeting.name"/></h1>
-  <a href="../../j_spring_security_logout" data-icon="delete"><s:text name="link.logout" /></a>
+  <a href="../menu.jsp" data-icon="home" data-direction="reverse"><s:text name="link.menu" /></a>
 </header>
 
 <div data-role="content" class="content" >

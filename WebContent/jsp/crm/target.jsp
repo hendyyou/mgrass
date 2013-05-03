@@ -17,9 +17,9 @@
 
 <div data-role="page" id="targetpage" data-add-back-btn="true">
 <header data-role="header" data-theme="b" data-position="inline">
-  <a href="../menu.jsp" data-icon="arrow-l" data-rel="back" ><s:text name="link.back" /></a>  
+  <a href="<s:url action="listTargetPage" namespace="/jsp/crm"/>" data-icon="arrow-l" data-rel="back" ><s:text name="link.back" /></a>  
   <h1><s:text name="entity.target.label"/>:<s:property value="target.name"/></h1>
-  <a href="../../j_spring_security_logout" data-icon="delete"><s:text name="link.logout" /></a>
+  <a href="../menu.jsp" data-icon="home" data-direction="reverse"><s:text name="link.menu" /></a>
 </header>
 
 <div data-role="content" class="content" >
@@ -116,8 +116,10 @@
 	     <h3 style="margin-top:0"><s:property value="target.department"/></h3>
 	   </li>
 	  <li>
-	    <h3 class="ui-disabled" style="margin:0 inherit"><s:text name="entity.account.label"/>:</h3>
-	    <h3 style="margin-top:0"><s:property value="accountText"/></h3>
+	    <a href="getAccount.action?id=<s:property value="accountID"/>">
+	      <h3 class="ui-disabled" style="margin:0 inherit"><s:text name="entity.account.label"/>:</h3>
+	      <h3 style="margin-top:0"><s:property value="accountText"/></h3>
+	    </a>
       </li>	   
        <li>
 	     <h3 class="ui-disabled" style="margin:0 inherit"><s:text name="entity.not_call.label"/>:</h3>

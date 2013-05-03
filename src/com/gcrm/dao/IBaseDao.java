@@ -48,6 +48,14 @@ public interface IBaseDao<T extends Serializable> {
      */
     public T findByName(String clazz, String name);
 
+    /**
+     * Finds records by hql
+     * 
+     * @param hql
+     *            hql with parameters
+     * @return result list
+     * @throws Exception
+     */
     public List<T> findByHQL(String hql);
 
     /**

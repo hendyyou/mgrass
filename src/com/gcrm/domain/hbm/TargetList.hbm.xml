@@ -8,8 +8,6 @@
    <generator class="native"/>
   </id>
   <property name="name" column="name" type="string" not-null="true"/>  
-  <many-to-one name="type"
-			class="TargetListType" column="type" cascade="save-update"/>   
   <property name="description" column="description" type="string" />  
   <many-to-one name="assigned_to"
 			class="User" column="assigned_to" cascade="save-update"/>
@@ -37,6 +35,10 @@
   <set cascade="all" name="accounts" table="targetList_account">   
      <key column="targetList_id" />   
      <many-to-many class="com.gcrm.domain.Account"  column="account_id" />
-  </set>       				     			    
+  </set>
+  <set cascade="all" name="campaigns" table="campaign_targetList">   
+     <key column="targetList_id" />   
+     <many-to-many class="com.gcrm.domain.Campaign"  column="campaign_id" />
+  </set>  
  </class>
 </hibernate-mapping>

@@ -17,9 +17,9 @@
 
 <div data-role="page" id="contactpage" data-add-back-btn="true">
 <header data-role="header" data-theme="b" data-position="inline">
-  <a href="../menu.jsp" data-icon="arrow-l" data-rel="back" ><s:text name="link.back" /></a>  
+  <a href="<s:url action="listContactPage" namespace="/jsp/crm"/>" data-icon="arrow-l" data-rel="back" ><s:text name="link.back" /></a>  
   <h1><s:text name="entity.contact.label"/>:<s:property value="contact.name"/></h1>
-  <a href="../../j_spring_security_logout" data-icon="delete"><s:text name="link.logout" /></a>
+  <a href="../menu.jsp" data-icon="home" data-direction="reverse"><s:text name="link.menu" /></a>
 </header>
 
 <div data-role="content" class="content" >
@@ -43,9 +43,11 @@
 	    <h3 style="margin-top:0"><s:property value="contact.title"/></h3>
       </li>
 	  <li>
-	    <h3 class="ui-disabled" style="margin:0 inherit"><s:text name="entity.account.label"/>:</h3>
-	    <h3 style="margin-top:0"><s:property value="accountText"/></h3>
-      </li>                        
+	    <a href="getAccount.action?id=<s:property value="accountID"/>">
+	      <h3 class="ui-disabled" style="margin:0 inherit"><s:text name="entity.account.label"/>:</h3>
+	      <h3 style="margin-top:0"><s:property value="accountText"/></h3>
+	    </a>
+      </li>
       <li>
 	    <h3 class="ui-disabled" style="margin:0 inherit"><s:text name="entity.owner.label"/>:</h3>
 	    <h3 style="margin-top:0"><s:property value="ownerText"/></h3>
@@ -128,16 +130,20 @@
 	     <h3 style="margin-top:0"><s:property value="leadSourceLabel"/></h3>
 	   </li>
        <li>
-	     <h3 class="ui-disabled" style="margin:0 inherit"><s:text name="entity.campaign.label"/>:</h3>
-	     <h3 style="margin-top:0"><s:property value="campaignText"/></h3>
+         <a href="getCampaign.action?id=<s:property value="campaignID"/>">
+	       <h3 class="ui-disabled" style="margin:0 inherit"><s:text name="entity.campaign.label"/>:</h3>
+	       <h3 style="margin-top:0"><s:property value="campaignText"/></h3>
+	     </a>
 	   </li>
        <li>
 	     <h3 class="ui-disabled" style="margin:0 inherit"><s:text name="entity.not_call.label"/>:</h3>
 	     <h3 style="margin-top:0"><s:property value="contact.not_call"/></h3>
 	   </li>
        <li>
-	     <h3 class="ui-disabled" style="margin:0 inherit"><s:text name="contact.report_to.label"/>:</h3>
-	     <h3 style="margin-top:0"><s:property value="contact.reportToText"/></h3>
+         <a href="getContact.action?id=<s:property value="reportToID"/>">
+	       <h3 class="ui-disabled" style="margin:0 inherit"><s:text name="contact.report_to.label"/>:</h3>
+	       <h3 style="margin-top:0"><s:property value="contact.reportToText"/></h3>
+	     </a>
 	   </li>
        <li>
 	     <h3 class="ui-disabled" style="margin:0 inherit"><s:text name="entity.assigned_to.label"/>:</h3>

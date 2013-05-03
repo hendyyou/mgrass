@@ -109,6 +109,16 @@ public class User extends BaseEntity implements Serializable {
     private Map<Integer, String> scopeMap;
     private Map<Integer, String> accessMap;
 
+    public User() {
+        super();
+    }
+
+    public User(String name, String password) {
+        super();
+        this.name = name;
+        this.password = password;
+    }
+
     @Override
     public User clone() {
         User o = null;
@@ -123,6 +133,7 @@ public class User extends BaseEntity implements Serializable {
     /**
      * @return the name
      */
+    @Override
     public String getName() {
         return name;
     }

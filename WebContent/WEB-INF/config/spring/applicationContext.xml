@@ -78,6 +78,10 @@
          <property name="sessionFactory" ref="sessionFactory"></property>
     </bean>	
 
+	<bean id="userDao" class="com.gcrm.dao.UserDao">
+	     <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>	
+    
     <!-- Services -->
     <bean id="baseService" class="com.gcrm.service.BaseService">
     	<property name="baseDao" ref="baseDao" />
@@ -88,8 +92,9 @@
     </bean> 
     
     <bean id="userService" class="com.gcrm.service.UserService">
-    	<property name="baseDao" ref="baseDao" />           	
-    </bean>   
+    	<property name="baseDao" ref="baseDao" /> 
+    	<property name="userDao" ref="userDao" />          	
+    </bean> 
 
         
     <!-- Actions -->
@@ -275,7 +280,6 @@
     
     <bean id="editTargetListAction" class="com.gcrm.action.EditTargetListAction" scope="prototype">   
         <property name="baseService" ref="baseService" /> 
-        <property name="targetListTypeService" ref="optionService" /> 	
         <property name="userService" ref="baseService" /> 	         	
     </bean>    
 

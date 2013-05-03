@@ -15,16 +15,10 @@
  */
 package com.gcrm.action;
 
-import java.util.List;
-import java.util.Map;
-
 import com.gcrm.domain.TargetList;
-import com.gcrm.domain.TargetListType;
 import com.gcrm.domain.User;
 import com.gcrm.service.IBaseService;
-import com.gcrm.service.IOptionService;
 import com.gcrm.util.Constant;
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.Preparable;
 
 /**
@@ -36,12 +30,8 @@ public class EditTargetListAction extends BaseEditAction implements Preparable {
     private static final long serialVersionUID = -2404576552417042445L;
 
     private IBaseService<TargetList> baseService;
-    private IOptionService<TargetListType> targetListTypeService;
     private IBaseService<User> userService;
     private TargetList targetList;
-    private List<TargetListType> targetListTypes;
-    private Integer typeID = null;
-    private String typeLabel = "";
 
     /**
      * Gets the entity.
@@ -52,12 +42,6 @@ public class EditTargetListAction extends BaseEditAction implements Preparable {
         if (this.getId() != null) {
             targetList = baseService.getEntityById(TargetList.class,
                     this.getId());
-            TargetListType type = targetList.getType();
-            if (type != null) {
-                typeID = type.getId();
-                typeLabel = type.getLabel();
-            }
-
             User assignedTo = targetList.getAssigned_to();
             if (assignedTo != null) {
                 this.setAssignedToID(assignedTo.getId());
@@ -76,11 +60,6 @@ public class EditTargetListAction extends BaseEditAction implements Preparable {
      * 
      */
     public void prepare() throws Exception {
-        ActionContext context = ActionContext.getContext();
-        Map<String, Object> session = context.getSession();
-        String local = (String) session.get("locale");
-        this.targetListTypes = targetListTypeService.getOptions(
-                TargetListType.class.getSimpleName(), local);
     }
 
     /**
@@ -114,36 +93,6 @@ public class EditTargetListAction extends BaseEditAction implements Preparable {
     }
 
     /**
-     * @return the typeID
-     */
-    public Integer getTypeID() {
-        return typeID;
-    }
-
-    /**
-     * @param typeID
-     *            the typeID to set
-     */
-    public void setTypeID(Integer typeID) {
-        this.typeID = typeID;
-    }
-
-    /**
-     * @return the targetListTypes
-     */
-    public List<TargetListType> getTargetListTypes() {
-        return targetListTypes;
-    }
-
-    /**
-     * @param targetListTypes
-     *            the targetListTypes to set
-     */
-    public void setTargetListTypes(List<TargetListType> targetListTypes) {
-        this.targetListTypes = targetListTypes;
-    }
-
-    /**
      * @return the targetList
      */
     public TargetList getTargetList() {
@@ -156,37 +105,6 @@ public class EditTargetListAction extends BaseEditAction implements Preparable {
      */
     public void setTargetList(TargetList targetList) {
         this.targetList = targetList;
-    }
-
-    /**
-     * @return the targetListTypeService
-     */
-    public IOptionService<TargetListType> getTargetListTypeService() {
-        return targetListTypeService;
-    }
-
-    /**
-     * @param targetListTypeService
-     *            the targetListTypeService to set
-     */
-    public void setTargetListTypeService(
-            IOptionService<TargetListType> targetListTypeService) {
-        this.targetListTypeService = targetListTypeService;
-    }
-
-    /**
-     * @return the typeLabel
-     */
-    public String getTypeLabel() {
-        return typeLabel;
-    }
-
-    /**
-     * @param typeLabel
-     *            the typeLabel to set
-     */
-    public void setTypeLabel(String typeLabel) {
-        this.typeLabel = typeLabel;
     }
 
 }

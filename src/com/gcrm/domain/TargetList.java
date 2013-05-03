@@ -9,7 +9,6 @@ public class TargetList extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 8250950813769457555L;
 
     private String name;
-    private TargetListType type;
     private String description;
     private String notes;
     private User assigned_to;
@@ -18,6 +17,7 @@ public class TargetList extends BaseEntity implements Serializable {
     private Set<Lead> leads = new HashSet<Lead>(0);
     private Set<User> users = new HashSet<User>(0);
     private Set<Account> accounts = new HashSet<Account>(0);
+    private Set<Campaign> campaigns = new HashSet<Campaign>(0);
 
     public TargetList() {
         super();
@@ -84,21 +84,6 @@ public class TargetList extends BaseEntity implements Serializable {
      */
     public void setAssigned_to(User assigned_to) {
         this.assigned_to = assigned_to;
-    }
-
-    /**
-     * @return the type
-     */
-    public TargetListType getType() {
-        return type;
-    }
-
-    /**
-     * @param type
-     *            the type to set
-     */
-    public void setType(TargetListType type) {
-        this.type = type;
     }
 
     /**
@@ -189,6 +174,21 @@ public class TargetList extends BaseEntity implements Serializable {
      */
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    /**
+     * @return the campaigns
+     */
+    public Set<Campaign> getCampaigns() {
+        return campaigns;
+    }
+
+    /**
+     * @param campaigns
+     *            the campaigns to set
+     */
+    public void setCampaigns(Set<Campaign> campaigns) {
+        this.campaigns = campaigns;
     }
 
 }

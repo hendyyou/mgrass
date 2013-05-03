@@ -16,6 +16,7 @@
 package com.gcrm.util.security;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -65,8 +66,17 @@ public class UserUtil {
     public static User getUser(String userName) {
         IUserService userService = (IUserService) SpringContextUtil
                 .getBean("userService");
+        StringBuilder hqlBuilder = new StringBuilder(
+                "select new User(name,password) from User");
+        hqlBuilder.append(" where name = ?");
         try {
-            return userService.findByName(userName);
+            List<User> result = userService.findByParam(hqlBuilder.toString(),
+                    userName);
+            if (result == null) {
+                return null;
+            } else {
+                return result.get(0);
+            }
         } catch (Exception e) {
             return null;
         }

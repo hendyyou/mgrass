@@ -126,6 +126,14 @@
 	   </li>		   	   	   
 	 </ul>
 	</div>
+	<div data-role="collapsible" data-collapsed="true" data-inset="false" data-mini="true" data-theme="b" data-content-theme="d" >
+	  <h3><s:text name='tab.related.targetList'/></h3>
+	  <ul id="targetListList" data-role="listview" data-filter="true" data-filter-placeholder="<s:text name="title.listTargetList" />..." data-inset="true">
+	  <s:iterator value="targetLists" id="targetList">
+	    <li><a href="getTargetList.action?id=<s:property value="#targetList.id"/>"><s:property value="#targetList.name"/></a></li>
+	  </s:iterator>
+	 </ul>
+	</div>	
   </s:form>
 </div>
 

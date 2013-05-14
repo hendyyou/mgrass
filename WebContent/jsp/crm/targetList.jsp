@@ -78,6 +78,46 @@
 	   </li>		   	   	   
 	 </ul>
 	</div>
+	<div data-role="collapsible" data-collapsed="true" data-inset="false" data-mini="true" data-theme="b" data-content-theme="d" >
+	  <h3><s:text name='tab.related.account'/></h3>
+	  <ul id="accountList" data-role="listview" data-filter="true" data-filter-placeholder="<s:text name="title.listAccount" />..." data-inset="true">
+	  <s:iterator value="accounts" id="account">
+	    <li><a href="getAccount.action?id=<s:property value="#account.id"/>"><s:property value="#account.name"/></a></li>
+	  </s:iterator>
+	 </ul>
+	</div>	
+	<div data-role="collapsible" data-collapsed="true" data-inset="false" data-mini="true" data-theme="b" data-content-theme="d" >
+	  <h3><s:text name='tab.related.contact'/></h3>
+	  <ul id="contactList" data-role="listview" data-filter="true" data-filter-placeholder="<s:text name="title.listContact" />..." data-inset="true">
+	  <s:iterator value="contacts" id="contact">
+	    <li><a href="getContact.action?id=<s:property value="#contact.id"/>"><s:property value="#contact.name"/></a></li>
+	  </s:iterator>
+	 </ul>
+	</div>
+	<div data-role="collapsible" data-collapsed="true" data-inset="false" data-mini="true" data-theme="b" data-content-theme="d" >
+	  <h3><s:text name='tab.related.lead'/></h3>
+	  <ul id="leadList" data-role="listview" data-filter="true" data-filter-placeholder="<s:text name="title.listLead" />..." data-inset="true">
+	  <s:iterator value="leads" id="lead">
+	    <li><a href="getLead.action?id=<s:property value="#lead.id"/>"><s:property value="#lead.name"/></a></li>
+	  </s:iterator>
+	 </ul>
+	</div>
+	<div data-role="collapsible" data-collapsed="true" data-inset="false" data-mini="true" data-theme="b" data-content-theme="d" >
+	  <h3><s:text name='tab.related.target'/></h3>
+	  <ul id="targetList" data-role="listview" data-filter="true" data-filter-placeholder="<s:text name="title.listTarget" />..." data-inset="true">
+	  <s:iterator value="targets" id="target">
+	    <li><a href="getTarget.action?id=<s:property value="#target.id"/>"><s:property value="#target.name"/></a></li>
+	  </s:iterator>
+	 </ul>
+	</div>	
+	<div data-role="collapsible" data-collapsed="true" data-inset="false" data-mini="true" data-theme="b" data-content-theme="d" >
+	  <h3><s:text name='tab.related.user'/></h3>
+	  <ul id="userList" data-role="listview" data-filter="true" data-filter-placeholder="<s:text name="title.listUser" />..." data-inset="true">
+	  <s:iterator value="users" id="user">
+	    <li><a href="getUser.action?id=<s:property value="#user.id"/>"><s:property value="#user.name"/></a></li>
+	  </s:iterator>
+	 </ul>
+	</div>			
   </s:form>
 </div>
 

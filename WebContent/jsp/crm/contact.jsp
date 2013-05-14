@@ -184,6 +184,46 @@
 	   </li>		   	   	   
 	 </ul>
 	</div>
+	<div data-role="collapsible" data-collapsed="true" data-inset="false" data-mini="true" data-theme="b" data-content-theme="d" >
+	  <h3><s:text name='tab.related.opportunity'/></h3>
+	  <ul id="opportunityList" data-role="listview" data-filter="true" data-filter-placeholder="<s:text name="title.listOpportunity" />..." data-inset="true">
+	  <s:iterator value="opportunities" id="opportunity">
+	    <li><a href="getOpportunity.action?id=<s:property value="#opportunity.id"/>"><s:property value="#opportunity.name"/></a></li>
+	  </s:iterator>
+	 </ul>
+	</div>
+	<div data-role="collapsible" data-collapsed="true" data-inset="false" data-mini="true" data-theme="b" data-content-theme="d" >
+	  <h3><s:text name='tab.related.lead'/></h3>
+	  <ul id="leadList" data-role="listview" data-filter="true" data-filter-placeholder="<s:text name="title.listLead" />..." data-inset="true">
+	  <s:iterator value="leads" id="lead">
+	    <li><a href="getLead.action?id=<s:property value="#lead.id"/>"><s:property value="#lead.name"/></a></li>
+	  </s:iterator>
+	 </ul>
+	</div>
+	<div data-role="collapsible" data-collapsed="true" data-inset="false" data-mini="true" data-theme="b" data-content-theme="d" >
+	  <h3><s:text name='tab.related.document'/></h3>
+	  <ul id="documentList" data-role="listview" data-filter="true" data-filter-placeholder="<s:text name="title.listDocument" />..." data-inset="true">
+	  <s:iterator value="documents" id="document">
+	    <li><a href="getDocument.action?id=<s:property value="#document.id"/>"><s:property value="#document.name"/></a></li>
+	  </s:iterator>
+	 </ul>
+	</div>
+	<div data-role="collapsible" data-collapsed="true" data-inset="false" data-mini="true" data-theme="b" data-content-theme="d" >
+	  <h3><s:text name='tab.related.task'/></h3>
+	  <ul id="taskList" data-role="listview" data-filter="true" data-filter-placeholder="<s:text name="title.listTask" />..." data-inset="true">
+	  <s:iterator value="tasks" id="task">
+	    <li><a href="getTask.action?id=<s:property value="#task.id"/>"><s:property value="#task.name"/></a></li>
+	  </s:iterator>
+	 </ul>
+	</div>
+	<div data-role="collapsible" data-collapsed="true" data-inset="false" data-mini="true" data-theme="b" data-content-theme="d" >
+	  <h3><s:text name='tab.related.case'/></h3>
+	  <ul id="caseList" data-role="listview" data-filter="true" data-filter-placeholder="<s:text name="title.listCase" />..." data-inset="true">
+	  <s:iterator value="cases" id="case">
+	    <li><a href="getCase.action?id=<s:property value="#case.id"/>"><s:property value="#case.name"/></a></li>
+	  </s:iterator>
+	 </ul>
+	</div>	
   </s:form>
 </div>
 

@@ -15,21 +15,24 @@
  */
 package com.gcrm.action;
 
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import com.gcrm.domain.Account;
 import com.gcrm.domain.AccountType;
 import com.gcrm.domain.Campaign;
+import com.gcrm.domain.CaseInstance;
+import com.gcrm.domain.Contact;
 import com.gcrm.domain.Document;
 import com.gcrm.domain.Industry;
-import com.gcrm.domain.TargetList;
+import com.gcrm.domain.Lead;
+import com.gcrm.domain.Opportunity;
+import com.gcrm.domain.Task;
 import com.gcrm.domain.User;
 import com.gcrm.service.IBaseService;
-import com.gcrm.service.IOptionService;
 import com.gcrm.util.Constant;
 import com.gcrm.util.security.UserUtil;
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.Preparable;
 
 /**
@@ -41,15 +44,20 @@ public class EditAccountAction extends BaseEditAction implements Preparable {
     private static final long serialVersionUID = -2404576552417042445L;
 
     private IBaseService<Account> baseService;
-    private IOptionService<AccountType> accountTypeService;
-    private IOptionService<Industry> industryService;
-    private IBaseService<User> userService;
     private IBaseService<Campaign> campaignService;
-    private IBaseService<TargetList> targetListService;
-    private IBaseService<Document> documentService;
+    private IBaseService<Contact> contactService;
+    private IBaseService<Opportunity> opportunityService;
+    private IBaseService<Lead> leadService;
+    private IBaseService<CaseInstance> caseService;
+    private IBaseService<Task> taskService;
     private Account account;
-    private List<AccountType> types;
-    private List<Industry> industries;
+    private Iterator<Contact> contacts;
+    private Iterator<Opportunity> opportunities;
+    private Iterator<Lead> leads;
+    private Iterator<Account> members;
+    private Iterator<Document> documents;
+    private Iterator<CaseInstance> cases;
+    private Iterator<Task> tasks;
     private Integer typeID = null;
     private String typeLabel = "";
     private Integer industryID = null;
@@ -92,6 +100,60 @@ public class EditAccountAction extends BaseEditAction implements Preparable {
             }
             this.getBaseInfo(account, Account.class.getSimpleName(),
                     Constant.CRM_NAMESPACE);
+            // Gets related contacts
+            StringBuilder contactHqlBuilder = new StringBuilder(
+                    "select new Contact(id,first_name,last_name) from Contact");
+            contactHqlBuilder.append(" where account = ").append(this.getId());
+            contactHqlBuilder.append(" order by created_on desc");
+            List<Contact> contactResult = contactService
+                    .findByHQL(contactHqlBuilder.toString());
+            contacts = contactResult.iterator();
+            // Gets related opportunities
+            StringBuilder oppHqlBuilder = new StringBuilder(
+                    "select new Opportunity(id,name) from Opportunity");
+            oppHqlBuilder.append(" where account = ").append(this.getId());
+            oppHqlBuilder.append(" order by created_on desc");
+            List<Opportunity> oppResult = opportunityService
+                    .findByHQL(oppHqlBuilder.toString());
+            opportunities = oppResult.iterator();
+            // Gets related leads
+            StringBuilder leadHqlBuilder = new StringBuilder(
+                    "select new Lead(id,first_name,last_name) from Lead");
+            leadHqlBuilder.append(" where account = ").append(this.getId());
+            leadHqlBuilder.append(" order by created_on desc");
+            List<Lead> leadResult = leadService.findByHQL(leadHqlBuilder
+                    .toString());
+            leads = leadResult.iterator();
+            // Gets related members
+            StringBuilder memberHqlBuilder = new StringBuilder(
+                    "select new Account(id,name) from Account");
+            memberHqlBuilder.append(" where manager = ").append(this.getId());
+            memberHqlBuilder.append(" order by created_on desc");
+            List<Account> memberResult = baseService.findByHQL(memberHqlBuilder
+                    .toString());
+            members = memberResult.iterator();
+            // Gets related documents
+            Set<Document> documentResult = account.getDocuments();
+            documents = documentResult.iterator();
+            // Gets related cases
+            StringBuilder caseHqlBuilder = new StringBuilder(
+                    "select new CaseInstance(id,subject) from CaseInstance");
+            caseHqlBuilder.append(" where account = ").append(this.getId());
+            caseHqlBuilder.append(" order by created_on desc");
+            List<CaseInstance> caseResult = caseService
+                    .findByHQL(caseHqlBuilder.toString());
+            cases = caseResult.iterator();
+            // Gets related tasks
+            StringBuilder taskHqlBuilder = new StringBuilder(
+                    "select new Task(id,subject) from Task");
+            taskHqlBuilder.append(
+                    " where related_object = 'Account' and related_record = ")
+                    .append(this.getId());
+            taskHqlBuilder.append(" order by created_on desc");
+            List<Task> taskResult = taskService.findByHQL(taskHqlBuilder
+                    .toString());
+            tasks = taskResult.iterator();
+
         } else {
             this.initBaseInfo();
         }
@@ -103,13 +165,7 @@ public class EditAccountAction extends BaseEditAction implements Preparable {
      * 
      */
     public void prepare() throws Exception {
-        ActionContext context = ActionContext.getContext();
-        Map<String, Object> session = context.getSession();
-        String local = (String) session.get("locale");
-        this.types = accountTypeService.getOptions(
-                AccountType.class.getSimpleName(), local);
-        this.industries = industryService.getOptions(
-                Industry.class.getSimpleName(), local);
+
     }
 
     /**
@@ -128,37 +184,6 @@ public class EditAccountAction extends BaseEditAction implements Preparable {
     }
 
     /**
-     * @return the accountTypeService
-     */
-    public IOptionService<AccountType> getAccountTypeService() {
-        return accountTypeService;
-    }
-
-    /**
-     * @param accountTypeService
-     *            the accountTypeService to set
-     */
-    public void setAccountTypeService(
-            IOptionService<AccountType> accountTypeService) {
-        this.accountTypeService = accountTypeService;
-    }
-
-    /**
-     * @return the userService
-     */
-    public IBaseService<User> getUserService() {
-        return userService;
-    }
-
-    /**
-     * @param userService
-     *            the userService to set
-     */
-    public void setUserService(IBaseService<User> userService) {
-        this.userService = userService;
-    }
-
-    /**
      * @return the account
      */
     public Account getAccount() {
@@ -171,36 +196,6 @@ public class EditAccountAction extends BaseEditAction implements Preparable {
      */
     public void setAccount(Account account) {
         this.account = account;
-    }
-
-    /**
-     * @return the types
-     */
-    public List<AccountType> getTypes() {
-        return types;
-    }
-
-    /**
-     * @param types
-     *            the types to set
-     */
-    public void setTypes(List<AccountType> types) {
-        this.types = types;
-    }
-
-    /**
-     * @return the industries
-     */
-    public List<Industry> getIndustries() {
-        return industries;
-    }
-
-    /**
-     * @param industries
-     *            the industries to set
-     */
-    public void setIndustries(List<Industry> industries) {
-        this.industries = industries;
     }
 
     /**
@@ -279,36 +274,6 @@ public class EditAccountAction extends BaseEditAction implements Preparable {
     }
 
     /**
-     * @return the targetListService
-     */
-    public IBaseService<TargetList> getTargetListService() {
-        return targetListService;
-    }
-
-    /**
-     * @param targetListService
-     *            the targetListService to set
-     */
-    public void setTargetListService(IBaseService<TargetList> targetListService) {
-        this.targetListService = targetListService;
-    }
-
-    /**
-     * @return the documentService
-     */
-    public IBaseService<Document> getDocumentService() {
-        return documentService;
-    }
-
-    /**
-     * @param documentService
-     *            the documentService to set
-     */
-    public void setDocumentService(IBaseService<Document> documentService) {
-        this.documentService = documentService;
-    }
-
-    /**
      * @return the managerText
      */
     public String getManagerText() {
@@ -321,21 +286,6 @@ public class EditAccountAction extends BaseEditAction implements Preparable {
      */
     public void setManagerText(String managerText) {
         this.managerText = managerText;
-    }
-
-    /**
-     * @return the industryService
-     */
-    public IOptionService<Industry> getIndustryService() {
-        return industryService;
-    }
-
-    /**
-     * @param industryService
-     *            the industryService to set
-     */
-    public void setIndustryService(IOptionService<Industry> industryService) {
-        this.industryService = industryService;
     }
 
     /**
@@ -366,6 +316,187 @@ public class EditAccountAction extends BaseEditAction implements Preparable {
      */
     public void setIndustryLabel(String industryLabel) {
         this.industryLabel = industryLabel;
+    }
+
+    /**
+     * @return the contactService
+     */
+    public IBaseService<Contact> getContactService() {
+        return contactService;
+    }
+
+    /**
+     * @param contactService
+     *            the contactService to set
+     */
+    public void setContactService(IBaseService<Contact> contactService) {
+        this.contactService = contactService;
+    }
+
+    /**
+     * @return the contacts
+     */
+    public Iterator<Contact> getContacts() {
+        return contacts;
+    }
+
+    /**
+     * @param contacts
+     *            the contacts to set
+     */
+    public void setContacts(Iterator<Contact> contacts) {
+        this.contacts = contacts;
+    }
+
+    /**
+     * @return the opportunityService
+     */
+    public IBaseService<Opportunity> getOpportunityService() {
+        return opportunityService;
+    }
+
+    /**
+     * @param opportunityService
+     *            the opportunityService to set
+     */
+    public void setOpportunityService(
+            IBaseService<Opportunity> opportunityService) {
+        this.opportunityService = opportunityService;
+    }
+
+    /**
+     * @return the leadService
+     */
+    public IBaseService<Lead> getLeadService() {
+        return leadService;
+    }
+
+    /**
+     * @param leadService
+     *            the leadService to set
+     */
+    public void setLeadService(IBaseService<Lead> leadService) {
+        this.leadService = leadService;
+    }
+
+    /**
+     * @return the caseService
+     */
+    public IBaseService<CaseInstance> getCaseService() {
+        return caseService;
+    }
+
+    /**
+     * @param caseService
+     *            the caseService to set
+     */
+    public void setCaseService(IBaseService<CaseInstance> caseService) {
+        this.caseService = caseService;
+    }
+
+    /**
+     * @return the taskService
+     */
+    public IBaseService<Task> getTaskService() {
+        return taskService;
+    }
+
+    /**
+     * @param taskService
+     *            the taskService to set
+     */
+    public void setTaskService(IBaseService<Task> taskService) {
+        this.taskService = taskService;
+    }
+
+    /**
+     * @return the opportunities
+     */
+    public Iterator<Opportunity> getOpportunities() {
+        return opportunities;
+    }
+
+    /**
+     * @param opportunities
+     *            the opportunities to set
+     */
+    public void setOpportunities(Iterator<Opportunity> opportunities) {
+        this.opportunities = opportunities;
+    }
+
+    /**
+     * @return the leads
+     */
+    public Iterator<Lead> getLeads() {
+        return leads;
+    }
+
+    /**
+     * @param leads
+     *            the leads to set
+     */
+    public void setLeads(Iterator<Lead> leads) {
+        this.leads = leads;
+    }
+
+    /**
+     * @return the members
+     */
+    public Iterator<Account> getMembers() {
+        return members;
+    }
+
+    /**
+     * @param members
+     *            the members to set
+     */
+    public void setMembers(Iterator<Account> members) {
+        this.members = members;
+    }
+
+    /**
+     * @return the documents
+     */
+    public Iterator<Document> getDocuments() {
+        return documents;
+    }
+
+    /**
+     * @param documents
+     *            the documents to set
+     */
+    public void setDocuments(Iterator<Document> documents) {
+        this.documents = documents;
+    }
+
+    /**
+     * @return the cases
+     */
+    public Iterator<CaseInstance> getCases() {
+        return cases;
+    }
+
+    /**
+     * @param cases
+     *            the cases to set
+     */
+    public void setCases(Iterator<CaseInstance> cases) {
+        this.cases = cases;
+    }
+
+    /**
+     * @return the tasks
+     */
+    public Iterator<Task> getTasks() {
+        return tasks;
+    }
+
+    /**
+     * @param tasks
+     *            the tasks to set
+     */
+    public void setTasks(Iterator<Task> tasks) {
+        this.tasks = tasks;
     }
 
 }

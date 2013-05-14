@@ -49,7 +49,7 @@ public class ListMeetingAction extends BaseListAction {
         if (scope == Role.OWNER_OR_DISABLED) {
             hqlBuilder.append(" where owner = ").append(loginUser.getId());
         }
-        hqlBuilder.append(" order by created_on");
+        hqlBuilder.append(" order by created_on desc");
         List<Meeting> result = baseService.findByHQL(hqlBuilder.toString());
         meetings = result.iterator();
         return SUCCESS;

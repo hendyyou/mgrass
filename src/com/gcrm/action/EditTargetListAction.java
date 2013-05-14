@@ -15,6 +15,13 @@
  */
 package com.gcrm.action;
 
+import java.util.Iterator;
+import java.util.Set;
+
+import com.gcrm.domain.Account;
+import com.gcrm.domain.Contact;
+import com.gcrm.domain.Lead;
+import com.gcrm.domain.Target;
 import com.gcrm.domain.TargetList;
 import com.gcrm.domain.User;
 import com.gcrm.service.IBaseService;
@@ -30,8 +37,12 @@ public class EditTargetListAction extends BaseEditAction implements Preparable {
     private static final long serialVersionUID = -2404576552417042445L;
 
     private IBaseService<TargetList> baseService;
-    private IBaseService<User> userService;
     private TargetList targetList;
+    private Iterator<Account> accounts;
+    private Iterator<Contact> contacts;
+    private Iterator<Target> targets;
+    private Iterator<User> users;
+    private Iterator<Lead> leads;
 
     /**
      * Gets the entity.
@@ -49,6 +60,21 @@ public class EditTargetListAction extends BaseEditAction implements Preparable {
             }
             this.getBaseInfo(targetList, TargetList.class.getSimpleName(),
                     Constant.CRM_NAMESPACE);
+            // Gets related accounts
+            Set<Account> accountResult = targetList.getAccounts();
+            accounts = accountResult.iterator();
+            // Gets related contacts
+            Set<Contact> contactResult = targetList.getContacts();
+            contacts = contactResult.iterator();
+            // Gets related leads
+            Set<Lead> leadResult = targetList.getLeads();
+            leads = leadResult.iterator();
+            // Gets related targets
+            Set<Target> targetResult = targetList.getTargets();
+            targets = targetResult.iterator();
+            // Gets related users
+            Set<User> userResult = targetList.getUsers();
+            users = userResult.iterator();
         } else {
             this.initBaseInfo();
         }
@@ -78,21 +104,6 @@ public class EditTargetListAction extends BaseEditAction implements Preparable {
     }
 
     /**
-     * @return the userService
-     */
-    public IBaseService<User> getUserService() {
-        return userService;
-    }
-
-    /**
-     * @param userService
-     *            the userService to set
-     */
-    public void setUserService(IBaseService<User> userService) {
-        this.userService = userService;
-    }
-
-    /**
      * @return the targetList
      */
     public TargetList getTargetList() {
@@ -105,6 +116,81 @@ public class EditTargetListAction extends BaseEditAction implements Preparable {
      */
     public void setTargetList(TargetList targetList) {
         this.targetList = targetList;
+    }
+
+    /**
+     * @return the accounts
+     */
+    public Iterator<Account> getAccounts() {
+        return accounts;
+    }
+
+    /**
+     * @param accounts
+     *            the accounts to set
+     */
+    public void setAccounts(Iterator<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+    /**
+     * @return the contacts
+     */
+    public Iterator<Contact> getContacts() {
+        return contacts;
+    }
+
+    /**
+     * @param contacts
+     *            the contacts to set
+     */
+    public void setContacts(Iterator<Contact> contacts) {
+        this.contacts = contacts;
+    }
+
+    /**
+     * @return the targets
+     */
+    public Iterator<Target> getTargets() {
+        return targets;
+    }
+
+    /**
+     * @param targets
+     *            the targets to set
+     */
+    public void setTargets(Iterator<Target> targets) {
+        this.targets = targets;
+    }
+
+    /**
+     * @return the users
+     */
+    public Iterator<User> getUsers() {
+        return users;
+    }
+
+    /**
+     * @param users
+     *            the users to set
+     */
+    public void setUsers(Iterator<User> users) {
+        this.users = users;
+    }
+
+    /**
+     * @return the leads
+     */
+    public Iterator<Lead> getLeads() {
+        return leads;
+    }
+
+    /**
+     * @param leads
+     *            the leads to set
+     */
+    public void setLeads(Iterator<Lead> leads) {
+        this.leads = leads;
     }
 
 }

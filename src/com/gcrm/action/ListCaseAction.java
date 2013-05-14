@@ -53,8 +53,8 @@ public class ListCaseAction extends BaseListAction {
         SearchCondition searchCondition = getFewSearchCondition(
                 loginUser.getScope_case(), loginUser);
         String hql = "select new Case(id,subject) from Case";
-        SearchResult<CaseInstance> result = baseService.getPaginationObjectsWithHql(
-                CLAZZ, hql, searchCondition);
+        SearchResult<CaseInstance> result = baseService
+                .getPaginationObjectsWithHql(CLAZZ, hql, searchCondition);
         Iterator<CaseInstance> cases = result.getResult().iterator();
         getJson(cases);
         return null;
@@ -75,8 +75,9 @@ public class ListCaseAction extends BaseListAction {
         if (scope == Role.OWNER_OR_DISABLED) {
             hqlBuilder.append(" where owner = ").append(loginUser.getId());
         }
-        hqlBuilder.append(" order by created_on");
-        List<CaseInstance> result = baseService.findByHQL(hqlBuilder.toString());
+        hqlBuilder.append(" order by created_on desc");
+        List<CaseInstance> result = baseService
+                .findByHQL(hqlBuilder.toString());
         cases = result.iterator();
         return SUCCESS;
     }

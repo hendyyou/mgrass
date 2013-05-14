@@ -15,19 +15,16 @@
  */
 package com.gcrm.action;
 
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import com.gcrm.domain.Account;
-import com.gcrm.domain.Lead;
 import com.gcrm.domain.Salutation;
 import com.gcrm.domain.Target;
-import com.gcrm.domain.TargetList;
+import com.gcrm.domain.Task;
 import com.gcrm.domain.User;
 import com.gcrm.service.IBaseService;
-import com.gcrm.service.IOptionService;
 import com.gcrm.util.Constant;
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.Preparable;
 
 /**
@@ -39,14 +36,9 @@ public class EditTargetAction extends BaseEditAction implements Preparable {
     private static final long serialVersionUID = -2404576552417042445L;
 
     private IBaseService<Target> baseService;
-    private IBaseService<Account> accountService;
-    private IBaseService<Lead> leadService;
-    private IBaseService<User> userService;
-    private IBaseService<TargetList> targetListService;
-    private IOptionService<Salutation> salutationService;
-    private List<Salutation> salutations;
+    private IBaseService<Task> taskService;
+    private Iterator<Task> tasks;
     private Target target;
-    private Lead lead;
     private Integer accountID = null;
     private String accountText = "";
     private Integer salutationID = null;
@@ -72,17 +64,6 @@ public class EditTargetAction extends BaseEditAction implements Preparable {
                 salutationLabel = salutation.getLabel();
             }
 
-            Integer leadID = target.getLead_id();
-            if (leadID != null) {
-                try {
-                    lead = this.getLeadService().getEntityById(Lead.class,
-                            leadID);
-                } catch (Exception e) {
-                    // in case the converted lead is deleted
-                    lead = null;
-                }
-            }
-
             User assignedTo = target.getAssigned_to();
             if (assignedTo != null) {
                 this.setAssignedToID(assignedTo.getId());
@@ -90,6 +71,16 @@ public class EditTargetAction extends BaseEditAction implements Preparable {
             }
             this.getBaseInfo(target, Target.class.getSimpleName(),
                     Constant.CRM_NAMESPACE);
+            // Gets related tasks
+            StringBuilder taskHqlBuilder = new StringBuilder(
+                    "select new Task(id,subject) from Task");
+            taskHqlBuilder.append(
+                    " where related_object = 'Target' and related_record = ")
+                    .append(this.getId());
+            taskHqlBuilder.append(" order by created_on desc");
+            List<Task> taskResult = taskService.findByHQL(taskHqlBuilder
+                    .toString());
+            tasks = taskResult.iterator();
         } else {
             this.initBaseInfo();
         }
@@ -101,41 +92,6 @@ public class EditTargetAction extends BaseEditAction implements Preparable {
      * 
      */
     public void prepare() throws Exception {
-        ActionContext context = ActionContext.getContext();
-        Map<String, Object> session = context.getSession();
-        String local = (String) session.get("locale");
-        this.salutations = salutationService.getOptions(
-                Salutation.class.getSimpleName(), local);
-    }
-
-    /**
-     * @return the accountService
-     */
-    public IBaseService<Account> getAccountService() {
-        return accountService;
-    }
-
-    /**
-     * @param accountService
-     *            the accountService to set
-     */
-    public void setAccountService(IBaseService<Account> accountService) {
-        this.accountService = accountService;
-    }
-
-    /**
-     * @return the userService
-     */
-    public IBaseService<User> getUserService() {
-        return userService;
-    }
-
-    /**
-     * @param userService
-     *            the userService to set
-     */
-    public void setUserService(IBaseService<User> userService) {
-        this.userService = userService;
     }
 
     /**
@@ -169,36 +125,6 @@ public class EditTargetAction extends BaseEditAction implements Preparable {
     }
 
     /**
-     * @return the targetListService
-     */
-    public IBaseService<TargetList> getTargetListService() {
-        return targetListService;
-    }
-
-    /**
-     * @param targetListService
-     *            the targetListService to set
-     */
-    public void setTargetListService(IBaseService<TargetList> targetListService) {
-        this.targetListService = targetListService;
-    }
-
-    /**
-     * @return the salutations
-     */
-    public List<Salutation> getSalutations() {
-        return salutations;
-    }
-
-    /**
-     * @param salutations
-     *            the salutations to set
-     */
-    public void setSalutations(List<Salutation> salutations) {
-        this.salutations = salutations;
-    }
-
-    /**
      * @return the salutationID
      */
     public Integer getSalutationID() {
@@ -211,52 +137,6 @@ public class EditTargetAction extends BaseEditAction implements Preparable {
      */
     public void setSalutationID(Integer salutationID) {
         this.salutationID = salutationID;
-    }
-
-    /**
-     * @return the leadService
-     */
-    public IBaseService<Lead> getLeadService() {
-        return leadService;
-    }
-
-    /**
-     * @param leadService
-     *            the leadService to set
-     */
-    public void setLeadService(IBaseService<Lead> leadService) {
-        this.leadService = leadService;
-    }
-
-    /**
-     * @return the lead
-     */
-    public Lead getLead() {
-        return lead;
-    }
-
-    /**
-     * @param lead
-     *            the lead to set
-     */
-    public void setLead(Lead lead) {
-        this.lead = lead;
-    }
-
-    /**
-     * @return the salutationService
-     */
-    public IOptionService<Salutation> getSalutationService() {
-        return salutationService;
-    }
-
-    /**
-     * @param salutationService
-     *            the salutationService to set
-     */
-    public void setSalutationService(
-            IOptionService<Salutation> salutationService) {
-        this.salutationService = salutationService;
     }
 
     /**
@@ -302,6 +182,36 @@ public class EditTargetAction extends BaseEditAction implements Preparable {
      */
     public void setSalutationLabel(String salutationLabel) {
         this.salutationLabel = salutationLabel;
+    }
+
+    /**
+     * @return the tasks
+     */
+    public Iterator<Task> getTasks() {
+        return tasks;
+    }
+
+    /**
+     * @param tasks
+     *            the tasks to set
+     */
+    public void setTasks(Iterator<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    /**
+     * @return the taskService
+     */
+    public IBaseService<Task> getTaskService() {
+        return taskService;
+    }
+
+    /**
+     * @param taskService
+     *            the taskService to set
+     */
+    public void setTaskService(IBaseService<Task> taskService) {
+        this.taskService = taskService;
     }
 
 }

@@ -108,6 +108,30 @@
 	   </li>		   	   	   
 	 </ul>
 	</div>
+	<div data-role="collapsible" data-collapsed="true" data-inset="false" data-mini="true" data-theme="b" data-content-theme="d" >
+	  <h3><s:text name='tab.related.contact'/></h3>
+	  <ul id="contactList" data-role="listview" data-filter="true" data-filter-placeholder="<s:text name="title.listContact" />..." data-inset="true">
+	  <s:iterator value="contacts" id="contact">
+	    <li><a href="getContact.action?id=<s:property value="#contact.id"/>"><s:property value="#contact.name"/></a></li>
+	  </s:iterator>
+	 </ul>
+	</div>
+	<div data-role="collapsible" data-collapsed="true" data-inset="false" data-mini="true" data-theme="b" data-content-theme="d" >
+	  <h3><s:text name='tab.related.document'/></h3>
+	  <ul id="documentList" data-role="listview" data-filter="true" data-filter-placeholder="<s:text name="title.listDocument" />..." data-inset="true">
+	  <s:iterator value="documents" id="document">
+	    <li><a href="getDocument.action?id=<s:property value="#document.id"/>"><s:property value="#document.name"/></a></li>
+	  </s:iterator>
+	 </ul>
+	</div>
+	<div data-role="collapsible" data-collapsed="true" data-inset="false" data-mini="true" data-theme="b" data-content-theme="d" >
+	  <h3><s:text name='tab.related.task'/></h3>
+	  <ul id="taskList" data-role="listview" data-filter="true" data-filter-placeholder="<s:text name="title.listTask" />..." data-inset="true">
+	  <s:iterator value="tasks" id="task">
+	    <li><a href="getTask.action?id=<s:property value="#task.id"/>"><s:property value="#task.name"/></a></li>
+	  </s:iterator>
+	 </ul>
+	</div>			
   </s:form>
 </div>
 

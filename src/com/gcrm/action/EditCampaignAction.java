@@ -17,18 +17,17 @@ package com.gcrm.action;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.Iterator;
+import java.util.Set;
 
 import com.gcrm.domain.Campaign;
 import com.gcrm.domain.CampaignStatus;
 import com.gcrm.domain.CampaignType;
 import com.gcrm.domain.Currency;
+import com.gcrm.domain.TargetList;
 import com.gcrm.domain.User;
 import com.gcrm.service.IBaseService;
-import com.gcrm.service.IOptionService;
 import com.gcrm.util.Constant;
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.Preparable;
 
 /**
@@ -40,14 +39,8 @@ public class EditCampaignAction extends BaseEditAction implements Preparable {
     private static final long serialVersionUID = -2404576552417042445L;
 
     private IBaseService<Campaign> baseService;
-    private IOptionService<CampaignType> campaignTypeService;
-    private IOptionService<CampaignStatus> campaignStatusService;
-    private IBaseService<Currency> currencyService;
-    private IBaseService<User> userService;
+    private Iterator<TargetList> targetLists;
     private Campaign campaign;
-    private List<CampaignType> types;
-    private List<CampaignStatus> statuses;
-    private List<Currency> currencies;
     private Integer statusID = null;
     private String statusLabel = "";
     private Integer typeID = null;
@@ -97,6 +90,9 @@ public class EditCampaignAction extends BaseEditAction implements Preparable {
             }
             this.getBaseInfo(campaign, Campaign.class.getSimpleName(),
                     Constant.CRM_NAMESPACE);
+            // Gets related targetLists
+            Set<TargetList> targetListResult = campaign.getTargetLists();
+            targetLists = targetListResult.iterator();
         } else {
             this.initBaseInfo();
         }
@@ -108,15 +104,6 @@ public class EditCampaignAction extends BaseEditAction implements Preparable {
      * 
      */
     public void prepare() throws Exception {
-        ActionContext context = ActionContext.getContext();
-        Map<String, Object> session = context.getSession();
-        String local = (String) session.get("locale");
-        this.statuses = campaignStatusService.getOptions(
-                CampaignStatus.class.getSimpleName(), local);
-        this.types = campaignTypeService.getOptions(
-                CampaignType.class.getSimpleName(), local);
-        this.currencies = currencyService.getAllObjects(Currency.class
-                .getSimpleName());
     }
 
     public IBaseService<Campaign> getbaseService() {
@@ -133,20 +120,6 @@ public class EditCampaignAction extends BaseEditAction implements Preparable {
 
     public void setCampaign(Campaign campaign) {
         this.campaign = campaign;
-    }
-
-    /**
-     * @return the types
-     */
-    public List<CampaignType> getTypes() {
-        return types;
-    }
-
-    /**
-     * @return the statuses
-     */
-    public List<CampaignStatus> getStatuses() {
-        return statuses;
     }
 
     /**
@@ -180,37 +153,6 @@ public class EditCampaignAction extends BaseEditAction implements Preparable {
     }
 
     /**
-     * @return the currencyService
-     */
-    public IBaseService<Currency> getCurrencyService() {
-        return currencyService;
-    }
-
-    /**
-     * @param currencyService
-     *            the currencyService to set
-     */
-    public void setCurrencyService(IBaseService<Currency> currencyService) {
-        this.currencyService = currencyService;
-    }
-
-    /**
-     * @return the currencies
-     */
-    public List<Currency> getCurrencies() {
-        return currencies;
-    }
-
-    /**
-     * @param currencies
-     *            the currencies to set
-     */
-    public void setCurrencies() {
-        this.currencies = currencyService.getAllObjects(Currency.class
-                .getSimpleName());
-    }
-
-    /**
      * @return the currencyID
      */
     public Integer getCurrencyID() {
@@ -223,21 +165,6 @@ public class EditCampaignAction extends BaseEditAction implements Preparable {
      */
     public void setCurrencyID(Integer currencyID) {
         this.currencyID = currencyID;
-    }
-
-    /**
-     * @return the userService
-     */
-    public IBaseService<User> getUserService() {
-        return userService;
-    }
-
-    /**
-     * @param userService
-     *            the userService to set
-     */
-    public void setUserService(IBaseService<User> userService) {
-        this.userService = userService;
     }
 
     /**
@@ -268,62 +195,6 @@ public class EditCampaignAction extends BaseEditAction implements Preparable {
      */
     public void setEndDate(String endDate) {
         this.endDate = endDate;
-    }
-
-    /**
-     * @param types
-     *            the types to set
-     */
-    public void setTypes(List<CampaignType> types) {
-        this.types = types;
-    }
-
-    /**
-     * @param statuses
-     *            the statuses to set
-     */
-    public void setStatuses(List<CampaignStatus> statuses) {
-        this.statuses = statuses;
-    }
-
-    /**
-     * @param currencies
-     *            the currencies to set
-     */
-    public void setCurrencies(List<Currency> currencies) {
-        this.currencies = currencies;
-    }
-
-    /**
-     * @return the campaignStatusService
-     */
-    public IOptionService<CampaignStatus> getCampaignStatusService() {
-        return campaignStatusService;
-    }
-
-    /**
-     * @param campaignStatusService
-     *            the campaignStatusService to set
-     */
-    public void setCampaignStatusService(
-            IOptionService<CampaignStatus> campaignStatusService) {
-        this.campaignStatusService = campaignStatusService;
-    }
-
-    /**
-     * @return the campaignTypeService
-     */
-    public IOptionService<CampaignType> getCampaignTypeService() {
-        return campaignTypeService;
-    }
-
-    /**
-     * @param campaignTypeService
-     *            the campaignTypeService to set
-     */
-    public void setCampaignTypeService(
-            IOptionService<CampaignType> campaignTypeService) {
-        this.campaignTypeService = campaignTypeService;
     }
 
     /**
@@ -369,6 +240,21 @@ public class EditCampaignAction extends BaseEditAction implements Preparable {
      */
     public void setCurrencyText(String currencyText) {
         this.currencyText = currencyText;
+    }
+
+    /**
+     * @return the targetLists
+     */
+    public Iterator<TargetList> getTargetLists() {
+        return targetLists;
+    }
+
+    /**
+     * @param targetLists
+     *            the targetLists to set
+     */
+    public void setTargetLists(Iterator<TargetList> targetLists) {
+        this.targetLists = targetLists;
     }
 
 }

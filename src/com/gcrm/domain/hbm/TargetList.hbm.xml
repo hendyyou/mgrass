@@ -16,6 +16,8 @@
 			class="User" column="updated_by" cascade="save-update"/>
   <property name="created_on" column="created_on" type="java.util.Date" />
   <property name="updated_on" column="updated_on" type="java.util.Date" />
+  <many-to-one name="owner"
+			class="User" column="owner" cascade="save-update"/>
   <set cascade="all" name="targets" table="targetList_target">   
      <key column="targetList_id" />   
      <many-to-many class="com.gcrm.domain.Target"  column="target_id" />
@@ -35,10 +37,10 @@
   <set cascade="all" name="accounts" table="targetList_account">   
      <key column="targetList_id" />   
      <many-to-many class="com.gcrm.domain.Account"  column="account_id" />
-  </set>
+  </set> 
   <set cascade="all" name="campaigns" table="campaign_targetList">   
      <key column="targetList_id" />   
      <many-to-many class="com.gcrm.domain.Campaign"  column="campaign_id" />
-  </set>  
+  </set>
  </class>
 </hibernate-mapping>

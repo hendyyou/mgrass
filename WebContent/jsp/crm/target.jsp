@@ -164,6 +164,14 @@
 	   </li>		   	   	   
 	 </ul>
 	</div>
+	<div data-role="collapsible" data-collapsed="true" data-inset="false" data-mini="true" data-theme="b" data-content-theme="d" >
+	  <h3><s:text name='tab.related.task'/></h3>
+	  <ul id="taskList" data-role="listview" data-filter="true" data-filter-placeholder="<s:text name="title.listTask" />..." data-inset="true">
+	  <s:iterator value="tasks" id="task">
+	    <li><a href="getTask.action?id=<s:property value="#task.id"/>"><s:property value="#task.name"/></a></li>
+	  </s:iterator>
+	 </ul>
+	</div>	
   </s:form>
 </div>
 

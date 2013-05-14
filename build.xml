@@ -39,7 +39,7 @@
 	
 	<!-- compile -->
 	<target name="compile" depends="cleanup_class">
-		<javac debug="true" destdir="${build.dir}" includeAntRuntime="false">
+		<javac debug="true" destdir="${build.dir}" target="1.6" source="1.6" includeAntRuntime="false">
 			<compilerarg line="-encoding UTF-8 -Xlint:unchecked" />
 			<classpath refid="master-classpath" />
 			<src path="${src.dir}" />

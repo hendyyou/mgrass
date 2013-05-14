@@ -18,8 +18,8 @@ package com.gcrm.action;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.Iterator;
+import java.util.Set;
 
 import com.gcrm.domain.Account;
 import com.gcrm.domain.CaseInstance;
@@ -31,9 +31,7 @@ import com.gcrm.domain.DocumentSubCategory;
 import com.gcrm.domain.Opportunity;
 import com.gcrm.domain.User;
 import com.gcrm.service.IBaseService;
-import com.gcrm.service.IOptionService;
 import com.gcrm.util.Constant;
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.Preparable;
 
 /**
@@ -45,18 +43,11 @@ public class EditDocumentAction extends BaseEditAction implements Preparable {
     private static final long serialVersionUID = -2404576552417042445L;
 
     private IBaseService<Document> baseService;
-    private IOptionService<DocumentStatus> documentStatusService;
-    private IOptionService<DocumentCategory> documentCategoryService;
-    private IOptionService<DocumentSubCategory> documentSubCategoryService;
-    private IBaseService<Account> accountService;
-    private IBaseService<Contact> contactService;
-    private IBaseService<Opportunity> opportunityService;
-    private IBaseService<CaseInstance> caseService;
-    private IBaseService<User> userService;
+    private Iterator<Account> accounts;
+    private Iterator<Contact> contacts;
+    private Iterator<Opportunity> opportunities;
+    private Iterator<CaseInstance> cases;
     private Document document;
-    private List<DocumentStatus> statuses;
-    private List<DocumentCategory> categories;
-    private List<DocumentSubCategory> subCategories;
     private Integer statusID = null;
     private String statusLabel = "";
     private Integer categoryID = null;
@@ -119,6 +110,18 @@ public class EditDocumentAction extends BaseEditAction implements Preparable {
             }
             this.getBaseInfo(document, Document.class.getSimpleName(),
                     Constant.CRM_NAMESPACE);
+            // Gets related accounts
+            Set<Account> accountResult = document.getAccounts();
+            accounts = accountResult.iterator();
+            // Gets related contacts
+            Set<Contact> contactResult = document.getContacts();
+            contacts = contactResult.iterator();
+            // Gets related opportunities
+            Set<Opportunity> oppResult = document.getOpportunities();
+            opportunities = oppResult.iterator();
+            // Gets related cases
+            Set<CaseInstance> caseResult = document.getCases();
+            cases = caseResult.iterator();
         } else {
             this.initBaseInfo();
         }
@@ -130,30 +133,6 @@ public class EditDocumentAction extends BaseEditAction implements Preparable {
      * 
      */
     public void prepare() throws Exception {
-        ActionContext context = ActionContext.getContext();
-        Map<String, Object> session = context.getSession();
-        String local = (String) session.get("locale");
-        this.statuses = documentStatusService.getOptions(
-                DocumentStatus.class.getSimpleName(), local);
-        this.categories = documentCategoryService.getOptions(
-                DocumentCategory.class.getSimpleName(), local);
-        this.subCategories = documentSubCategoryService.getOptions(
-                DocumentSubCategory.class.getSimpleName(), local);
-    }
-
-    /**
-     * @return the userService
-     */
-    public IBaseService<User> getUserService() {
-        return userService;
-    }
-
-    /**
-     * @param userService
-     *            the userService to set
-     */
-    public void setUserService(IBaseService<User> userService) {
-        this.userService = userService;
     }
 
     /**
@@ -169,51 +148,6 @@ public class EditDocumentAction extends BaseEditAction implements Preparable {
      */
     public void setDocument(Document document) {
         this.document = document;
-    }
-
-    /**
-     * @return the statuses
-     */
-    public List<DocumentStatus> getStatuses() {
-        return statuses;
-    }
-
-    /**
-     * @param statuses
-     *            the statuses to set
-     */
-    public void setStatuses(List<DocumentStatus> statuses) {
-        this.statuses = statuses;
-    }
-
-    /**
-     * @return the categories
-     */
-    public List<DocumentCategory> getCategories() {
-        return categories;
-    }
-
-    /**
-     * @param categories
-     *            the categories to set
-     */
-    public void setCategories(List<DocumentCategory> categories) {
-        this.categories = categories;
-    }
-
-    /**
-     * @return the subCategories
-     */
-    public List<DocumentSubCategory> getSubCategories() {
-        return subCategories;
-    }
-
-    /**
-     * @param subCategories
-     *            the subCategories to set
-     */
-    public void setSubCategories(List<DocumentSubCategory> subCategories) {
-        this.subCategories = subCategories;
     }
 
     /**
@@ -367,119 +301,10 @@ public class EditDocumentAction extends BaseEditAction implements Preparable {
     }
 
     /**
-     * @return the accountService
-     */
-    public IBaseService<Account> getAccountService() {
-        return accountService;
-    }
-
-    /**
-     * @param accountService
-     *            the accountService to set
-     */
-    public void setAccountService(IBaseService<Account> accountService) {
-        this.accountService = accountService;
-    }
-
-    /**
-     * @return the contactService
-     */
-    public IBaseService<Contact> getContactService() {
-        return contactService;
-    }
-
-    /**
-     * @param contactService
-     *            the contactService to set
-     */
-    public void setContactService(IBaseService<Contact> contactService) {
-        this.contactService = contactService;
-    }
-
-    /**
-     * @return the opportunityService
-     */
-    public IBaseService<Opportunity> getOpportunityService() {
-        return opportunityService;
-    }
-
-    /**
-     * @param opportunityService
-     *            the opportunityService to set
-     */
-    public void setOpportunityService(
-            IBaseService<Opportunity> opportunityService) {
-        this.opportunityService = opportunityService;
-    }
-
-    /**
-     * @return the caseService
-     */
-    public IBaseService<CaseInstance> getCaseService() {
-        return caseService;
-    }
-
-    /**
-     * @param caseService
-     *            the caseService to set
-     */
-    public void setCaseService(IBaseService<CaseInstance> caseService) {
-        this.caseService = caseService;
-    }
-
-    /**
      * @return the relatedDocumentText
      */
     public String getRelatedDocumentText() {
         return relatedDocumentText;
-    }
-
-    /**
-     * @return the documentStatusService
-     */
-    public IOptionService<DocumentStatus> getDocumentStatusService() {
-        return documentStatusService;
-    }
-
-    /**
-     * @param documentStatusService
-     *            the documentStatusService to set
-     */
-    public void setDocumentStatusService(
-            IOptionService<DocumentStatus> documentStatusService) {
-        this.documentStatusService = documentStatusService;
-    }
-
-    /**
-     * @return the documentCategoryService
-     */
-    public IOptionService<DocumentCategory> getDocumentCategoryService() {
-        return documentCategoryService;
-    }
-
-    /**
-     * @param documentCategoryService
-     *            the documentCategoryService to set
-     */
-    public void setDocumentCategoryService(
-            IOptionService<DocumentCategory> documentCategoryService) {
-        this.documentCategoryService = documentCategoryService;
-    }
-
-    /**
-     * @return the documentSubCategoryService
-     */
-    public IOptionService<DocumentSubCategory> getDocumentSubCategoryService() {
-        return documentSubCategoryService;
-    }
-
-    /**
-     * @param documentSubCategoryService
-     *            the documentSubCategoryService to set
-     */
-    public void setDocumentSubCategoryService(
-            IOptionService<DocumentSubCategory> documentSubCategoryService) {
-        this.documentSubCategoryService = documentSubCategoryService;
     }
 
     /**
@@ -556,5 +381,65 @@ public class EditDocumentAction extends BaseEditAction implements Preparable {
      */
     public void setPublishDateS(String publishDateS) {
         this.publishDateS = publishDateS;
+    }
+
+    /**
+     * @return the accounts
+     */
+    public Iterator<Account> getAccounts() {
+        return accounts;
+    }
+
+    /**
+     * @param accounts
+     *            the accounts to set
+     */
+    public void setAccounts(Iterator<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+    /**
+     * @return the contacts
+     */
+    public Iterator<Contact> getContacts() {
+        return contacts;
+    }
+
+    /**
+     * @param contacts
+     *            the contacts to set
+     */
+    public void setContacts(Iterator<Contact> contacts) {
+        this.contacts = contacts;
+    }
+
+    /**
+     * @return the opportunities
+     */
+    public Iterator<Opportunity> getOpportunities() {
+        return opportunities;
+    }
+
+    /**
+     * @param opportunities
+     *            the opportunities to set
+     */
+    public void setOpportunities(Iterator<Opportunity> opportunities) {
+        this.opportunities = opportunities;
+    }
+
+    /**
+     * @return the cases
+     */
+    public Iterator<CaseInstance> getCases() {
+        return cases;
+    }
+
+    /**
+     * @param cases
+     *            the cases to set
+     */
+    public void setCases(Iterator<CaseInstance> cases) {
+        this.cases = cases;
     }
 }

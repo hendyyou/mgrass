@@ -75,7 +75,7 @@ public class ListContactAction extends BaseListAction {
         if (scope == Role.OWNER_OR_DISABLED) {
             hqlBuilder.append(" where owner = ").append(loginUser.getId());
         }
-        hqlBuilder.append(" order by created_on");
+        hqlBuilder.append(" order by created_on desc");
         List<Contact> result = baseService.findByHQL(hqlBuilder.toString());
         contacts = result.iterator();
         return SUCCESS;

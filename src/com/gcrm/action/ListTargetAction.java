@@ -75,7 +75,7 @@ public class ListTargetAction extends BaseListAction {
         if (scope == Role.OWNER_OR_DISABLED) {
             hqlBuilder.append(" where owner = ").append(loginUser.getId());
         }
-        hqlBuilder.append(" order by created_on");
+        hqlBuilder.append(" order by created_on desc");
         List<Target> result = baseService.findByHQL(hqlBuilder.toString());
         targets = result.iterator();
         return SUCCESS;

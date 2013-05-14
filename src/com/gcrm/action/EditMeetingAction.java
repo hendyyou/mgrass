@@ -17,8 +17,8 @@ package com.gcrm.action;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.Iterator;
+import java.util.Set;
 
 import com.gcrm.domain.Account;
 import com.gcrm.domain.CaseInstance;
@@ -32,10 +32,8 @@ import com.gcrm.domain.Target;
 import com.gcrm.domain.Task;
 import com.gcrm.domain.User;
 import com.gcrm.service.IBaseService;
-import com.gcrm.service.IOptionService;
 import com.gcrm.util.CommonUtil;
 import com.gcrm.util.Constant;
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.Preparable;
 
 /**
@@ -47,9 +45,6 @@ public class EditMeetingAction extends BaseEditAction implements Preparable {
     private static final long serialVersionUID = -2404576552417042445L;
 
     private IBaseService<Meeting> baseService;
-    private IOptionService<MeetingStatus> meetingStatusService;
-    private IOptionService<ReminderOption> reminderOptionService;
-    private IBaseService<User> userService;
     private IBaseService<Account> accountService;
     private IBaseService<CaseInstance> caseService;
     private IBaseService<Contact> contactService;
@@ -57,9 +52,10 @@ public class EditMeetingAction extends BaseEditAction implements Preparable {
     private IBaseService<Opportunity> opportunityService;
     private IBaseService<Target> targetService;
     private IBaseService<Task> taskService;
+    private Iterator<Contact> contacts;
+    private Iterator<Lead> leads;
+    private Iterator<User> users;
     private Meeting meeting;
-    private List<MeetingStatus> statuses;
-    private List<ReminderOption> reminderOptions;
     private Integer statusID = null;
     private String statusLabel = "";
     private Integer reminderOptionEmailID = null;
@@ -118,6 +114,15 @@ public class EditMeetingAction extends BaseEditAction implements Preparable {
             }
             this.getBaseInfo(meeting, Meeting.class.getSimpleName(),
                     Constant.CRM_NAMESPACE);
+            // Gets related contacts
+            Set<Contact> contactResult = meeting.getContacts();
+            contacts = contactResult.iterator();
+            // Gets related leads
+            Set<Lead> leadResult = meeting.getLeads();
+            leads = leadResult.iterator();
+            // Gets related users
+            Set<User> userResult = meeting.getUsers();
+            users = userResult.iterator();
         } else {
             this.initBaseInfo();
             if (!CommonUtil.isNullOrEmpty(this.getRelationKey())) {
@@ -174,13 +179,6 @@ public class EditMeetingAction extends BaseEditAction implements Preparable {
      * 
      */
     public void prepare() throws Exception {
-        ActionContext context = ActionContext.getContext();
-        Map<String, Object> session = context.getSession();
-        String local = (String) session.get("locale");
-        this.statuses = meetingStatusService.getOptions(
-                MeetingStatus.class.getSimpleName(), local);
-        this.reminderOptions = reminderOptionService.getOptions(
-                ReminderOption.class.getSimpleName(), local);
     }
 
     /**
@@ -199,21 +197,6 @@ public class EditMeetingAction extends BaseEditAction implements Preparable {
     }
 
     /**
-     * @return the userService
-     */
-    public IBaseService<User> getUserService() {
-        return userService;
-    }
-
-    /**
-     * @param userService
-     *            the userService to set
-     */
-    public void setUserService(IBaseService<User> userService) {
-        this.userService = userService;
-    }
-
-    /**
      * @return the meeting
      */
     public Meeting getMeeting() {
@@ -226,36 +209,6 @@ public class EditMeetingAction extends BaseEditAction implements Preparable {
      */
     public void setMeeting(Meeting meeting) {
         this.meeting = meeting;
-    }
-
-    /**
-     * @return the statuses
-     */
-    public List<MeetingStatus> getStatuses() {
-        return statuses;
-    }
-
-    /**
-     * @param statuses
-     *            the statuses to set
-     */
-    public void setStatuses(List<MeetingStatus> statuses) {
-        this.statuses = statuses;
-    }
-
-    /**
-     * @return the reminderOptions
-     */
-    public List<ReminderOption> getReminderOptions() {
-        return reminderOptions;
-    }
-
-    /**
-     * @param reminderOptions
-     *            the reminderOptions to set
-     */
-    public void setReminderOptions(List<ReminderOption> reminderOptions) {
-        this.reminderOptions = reminderOptions;
     }
 
     /**
@@ -530,38 +483,6 @@ public class EditMeetingAction extends BaseEditAction implements Preparable {
     }
 
     /**
-     * @return the meetingStatusService
-     */
-    public IOptionService<MeetingStatus> getMeetingStatusService() {
-        return meetingStatusService;
-    }
-
-    /**
-     * @param meetingStatusService
-     *            the meetingStatusService to set
-     */
-    public void setMeetingStatusService(
-            IOptionService<MeetingStatus> meetingStatusService) {
-        this.meetingStatusService = meetingStatusService;
-    }
-
-    /**
-     * @return the reminderOptionService
-     */
-    public IOptionService<ReminderOption> getReminderOptionService() {
-        return reminderOptionService;
-    }
-
-    /**
-     * @param reminderOptionService
-     *            the reminderOptionService to set
-     */
-    public void setReminderOptionService(
-            IOptionService<ReminderOption> reminderOptionService) {
-        this.reminderOptionService = reminderOptionService;
-    }
-
-    /**
      * @return the statusLabel
      */
     public String getStatusLabel() {
@@ -619,5 +540,50 @@ public class EditMeetingAction extends BaseEditAction implements Preparable {
      */
     public void setRelatedRecordText(String relatedRecordText) {
         this.relatedRecordText = relatedRecordText;
+    }
+
+    /**
+     * @return the contacts
+     */
+    public Iterator<Contact> getContacts() {
+        return contacts;
+    }
+
+    /**
+     * @param contacts
+     *            the contacts to set
+     */
+    public void setContacts(Iterator<Contact> contacts) {
+        this.contacts = contacts;
+    }
+
+    /**
+     * @return the leads
+     */
+    public Iterator<Lead> getLeads() {
+        return leads;
+    }
+
+    /**
+     * @param leads
+     *            the leads to set
+     */
+    public void setLeads(Iterator<Lead> leads) {
+        this.leads = leads;
+    }
+
+    /**
+     * @return the users
+     */
+    public Iterator<User> getUsers() {
+        return users;
+    }
+
+    /**
+     * @param users
+     *            the users to set
+     */
+    public void setUsers(Iterator<User> users) {
+        this.users = users;
     }
 }

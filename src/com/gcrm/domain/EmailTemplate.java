@@ -9,10 +9,22 @@ public class EmailTemplate extends BaseEntity implements Serializable {
     private String name;
     private String type;
     private String description;
+    private String notes;
     private String subject;
     boolean text_only;
-    private String content;
+    private String html_body;
+    private String text_body;
     private User assigned_to;
+
+    public EmailTemplate() {
+        super();
+    }
+
+    public EmailTemplate(Integer id, String name) {
+        super();
+        this.setId(id);
+        this.name = name;
+    }
 
     @Override
     public EmailTemplate clone() {
@@ -87,21 +99,6 @@ public class EmailTemplate extends BaseEntity implements Serializable {
     }
 
     /**
-     * @return the content
-     */
-    public String getContent() {
-        return content;
-    }
-
-    /**
-     * @param content
-     *            the content to set
-     */
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    /**
      * @return the assigned_to
      */
     public User getAssigned_to() {
@@ -129,6 +126,51 @@ public class EmailTemplate extends BaseEntity implements Serializable {
      */
     public void setText_only(boolean text_only) {
         this.text_only = text_only;
+    }
+
+    /**
+     * @return the notes
+     */
+    public String getNotes() {
+        return notes;
+    }
+
+    /**
+     * @param notes
+     *            the notes to set
+     */
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    /**
+     * @return the html_body
+     */
+    public String getHtml_body() {
+        return html_body;
+    }
+
+    /**
+     * @param html_body
+     *            the html_body to set
+     */
+    public void setHtml_body(String html_body) {
+        this.html_body = html_body;
+    }
+
+    /**
+     * @return the text_body
+     */
+    public String getText_body() {
+        return text_body;
+    }
+
+    /**
+     * @param text_body
+     *            the text_body to set
+     */
+    public void setText_body(String text_body) {
+        this.text_body = text_body;
     }
 
 }

@@ -17,8 +17,6 @@ package com.gcrm.action;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 import com.gcrm.domain.Account;
 import com.gcrm.domain.CaseInstance;
@@ -31,10 +29,8 @@ import com.gcrm.domain.TaskPriority;
 import com.gcrm.domain.TaskStatus;
 import com.gcrm.domain.User;
 import com.gcrm.service.IBaseService;
-import com.gcrm.service.IOptionService;
 import com.gcrm.util.CommonUtil;
 import com.gcrm.util.Constant;
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.Preparable;
 
 /**
@@ -46,9 +42,7 @@ public class EditTaskAction extends BaseEditAction implements Preparable {
     private static final long serialVersionUID = -2404576552417042445L;
 
     private IBaseService<Task> baseService;
-    private IOptionService<TaskStatus> taskStatusService;
     private IBaseService<Contact> contactService;
-    private IOptionService<TaskPriority> taskPriorityService;
     private IBaseService<User> userService;
     private IBaseService<Account> accountService;
     private IBaseService<CaseInstance> caseService;
@@ -57,8 +51,6 @@ public class EditTaskAction extends BaseEditAction implements Preparable {
     private IBaseService<Target> targetService;
     private IBaseService<Task> taskService;
     private Task task = new Task();
-    private List<TaskStatus> statuses;
-    private List<TaskPriority> priorities;
     private Integer statusID = null;
     private String statusLabel = "";
     private Integer priorityID = null;
@@ -179,13 +171,6 @@ public class EditTaskAction extends BaseEditAction implements Preparable {
      * 
      */
     public void prepare() throws Exception {
-        ActionContext context = ActionContext.getContext();
-        Map<String, Object> session = context.getSession();
-        String local = (String) session.get("locale");
-        this.statuses = taskStatusService.getOptions(
-                TaskStatus.class.getSimpleName(), local);
-        this.priorities = taskPriorityService.getOptions(
-                TaskPriority.class.getSimpleName(), local);
     }
 
     /**
@@ -246,36 +231,6 @@ public class EditTaskAction extends BaseEditAction implements Preparable {
      */
     public void setTask(Task task) {
         this.task = task;
-    }
-
-    /**
-     * @return the statuses
-     */
-    public List<TaskStatus> getStatuses() {
-        return statuses;
-    }
-
-    /**
-     * @param statuses
-     *            the statuses to set
-     */
-    public void setStatuses(List<TaskStatus> statuses) {
-        this.statuses = statuses;
-    }
-
-    /**
-     * @return the priorities
-     */
-    public List<TaskPriority> getPriorities() {
-        return priorities;
-    }
-
-    /**
-     * @param priorities
-     *            the priorities to set
-     */
-    public void setPriorities(List<TaskPriority> priorities) {
-        this.priorities = priorities;
     }
 
     /**
@@ -562,38 +517,6 @@ public class EditTaskAction extends BaseEditAction implements Preparable {
      */
     public void setContactText(String contactText) {
         this.contactText = contactText;
-    }
-
-    /**
-     * @return the taskStatusService
-     */
-    public IOptionService<TaskStatus> getTaskStatusService() {
-        return taskStatusService;
-    }
-
-    /**
-     * @param taskStatusService
-     *            the taskStatusService to set
-     */
-    public void setTaskStatusService(
-            IOptionService<TaskStatus> taskStatusService) {
-        this.taskStatusService = taskStatusService;
-    }
-
-    /**
-     * @return the taskPriorityService
-     */
-    public IOptionService<TaskPriority> getTaskPriorityService() {
-        return taskPriorityService;
-    }
-
-    /**
-     * @param taskPriorityService
-     *            the taskPriorityService to set
-     */
-    public void setTaskPriorityService(
-            IOptionService<TaskPriority> taskPriorityService) {
-        this.taskPriorityService = taskPriorityService;
     }
 
     /**

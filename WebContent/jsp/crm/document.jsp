@@ -108,6 +108,38 @@
 	   </li>		   	   	   
 	 </ul>
 	</div>
+	<div data-role="collapsible" data-collapsed="true" data-inset="false" data-mini="true" data-theme="b" data-content-theme="d" >
+	  <h3><s:text name='tab.related.account'/></h3>
+	  <ul id="accountList" data-role="listview" data-filter="true" data-filter-placeholder="<s:text name="title.listAccount" />..." data-inset="true">
+	  <s:iterator value="accounts" id="account">
+	    <li><a href="getAccount.action?id=<s:property value="#account.id"/>"><s:property value="#account.name"/></a></li>
+	  </s:iterator>
+	 </ul>
+	</div>
+	<div data-role="collapsible" data-collapsed="true" data-inset="false" data-mini="true" data-theme="b" data-content-theme="d" >
+	  <h3><s:text name='tab.related.contact'/></h3>
+	  <ul id="contactList" data-role="listview" data-filter="true" data-filter-placeholder="<s:text name="title.listContact" />..." data-inset="true">
+	  <s:iterator value="contacts" id="contact">
+	    <li><a href="getContact.action?id=<s:property value="#contact.id"/>"><s:property value="#contact.name"/></a></li>
+	  </s:iterator>
+	 </ul>
+	</div>
+	<div data-role="collapsible" data-collapsed="true" data-inset="false" data-mini="true" data-theme="b" data-content-theme="d" >
+	  <h3><s:text name='tab.related.opportunity'/></h3>
+	  <ul id="opportunityList" data-role="listview" data-filter="true" data-filter-placeholder="<s:text name="title.listOpportunity" />..." data-inset="true">
+	  <s:iterator value="opportunities" id="opportunity">
+	    <li><a href="getOpportunity.action?id=<s:property value="#opportunity.id"/>"><s:property value="#opportunity.name"/></a></li>
+	  </s:iterator>
+	 </ul>
+	</div>
+	<div data-role="collapsible" data-collapsed="true" data-inset="false" data-mini="true" data-theme="b" data-content-theme="d" >
+	  <h3><s:text name='tab.related.case'/></h3>
+	  <ul id="caseList" data-role="listview" data-filter="true" data-filter-placeholder="<s:text name="title.listCase" />..." data-inset="true">
+	  <s:iterator value="cases" id="case">
+	    <li><a href="getCase.action?id=<s:property value="#case.id"/>"><s:property value="#case.name"/></a></li>
+	  </s:iterator>
+	 </ul>
+	</div>				
   </s:form>
 </div>
 

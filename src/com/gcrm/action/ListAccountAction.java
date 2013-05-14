@@ -49,7 +49,7 @@ public class ListAccountAction extends BaseListAction {
         if (scope == Role.OWNER_OR_DISABLED) {
             hqlBuilder.append(" where owner = ").append(loginUser.getId());
         }
-        hqlBuilder.append(" order by created_on");
+        hqlBuilder.append(" order by created_on desc");
         List<Account> result = baseService.findByHQL(hqlBuilder.toString());
         accounts = result.iterator();
         return SUCCESS;

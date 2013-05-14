@@ -1,4 +1,5 @@
 /**
+
  * Copyright (C) 2012, Grass CRM Inc
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,23 +18,24 @@ package com.gcrm.action;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import com.gcrm.domain.Account;
 import com.gcrm.domain.Campaign;
 import com.gcrm.domain.Contact;
 import com.gcrm.domain.Currency;
 import com.gcrm.domain.Document;
+import com.gcrm.domain.Lead;
 import com.gcrm.domain.LeadSource;
 import com.gcrm.domain.Opportunity;
 import com.gcrm.domain.OpportunityType;
 import com.gcrm.domain.SalesStage;
+import com.gcrm.domain.Task;
 import com.gcrm.domain.User;
 import com.gcrm.service.IBaseService;
-import com.gcrm.service.IOptionService;
 import com.gcrm.util.Constant;
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.Preparable;
 
 /**
@@ -45,20 +47,12 @@ public class EditOpportunityAction extends BaseEditAction implements Preparable 
     private static final long serialVersionUID = -2404576552417042445L;
 
     private IBaseService<Opportunity> baseService;
-    private IBaseService<Account> accountService;
-    private IBaseService<Currency> currencyService;
-    private IOptionService<OpportunityType> opportunityTypeService;
-    private IOptionService<SalesStage> salesStageService;
-    private IOptionService<LeadSource> leadSourceService;
-    private IBaseService<Campaign> campaignService;
-    private IBaseService<Contact> contactService;
-    private IBaseService<Document> documentService;
-    private IBaseService<User> userService;
+    private IBaseService<Task> taskService;
+    private Iterator<Contact> contacts;
+    private Iterator<Lead> leads;
+    private Iterator<Document> documents;
+    private Iterator<Task> tasks;
     private Opportunity opportunity;
-    private List<OpportunityType> types;
-    private List<Currency> currencies;
-    private List<SalesStage> salesStages;
-    private List<LeadSource> sources;
     private Integer accountID = null;
     private String accountText = null;
     private Integer typeID = null;
@@ -128,6 +122,25 @@ public class EditOpportunityAction extends BaseEditAction implements Preparable 
             }
             this.getBaseInfo(opportunity, Opportunity.class.getSimpleName(),
                     Constant.CRM_NAMESPACE);
+            // Gets related contacts
+            Set<Contact> contactResult = opportunity.getContacts();
+            contacts = contactResult.iterator();
+            // Gets related leads
+            Set<Lead> leadResult = opportunity.getLeads();
+            leads = leadResult.iterator();
+            // Gets related documents
+            Set<Document> documentResult = opportunity.getDocuments();
+            documents = documentResult.iterator();
+            // Gets related tasks
+            StringBuilder taskHqlBuilder = new StringBuilder(
+                    "select new Task(id,subject) from Task");
+            taskHqlBuilder
+                    .append(" where related_object = 'Opportunity' and related_record = ")
+                    .append(this.getId());
+            taskHqlBuilder.append(" order by created_on desc");
+            List<Task> taskResult = taskService.findByHQL(taskHqlBuilder
+                    .toString());
+            tasks = taskResult.iterator();
         } else {
             this.initBaseInfo();
         }
@@ -139,17 +152,6 @@ public class EditOpportunityAction extends BaseEditAction implements Preparable 
      * 
      */
     public void prepare() throws Exception {
-        ActionContext context = ActionContext.getContext();
-        Map<String, Object> session = context.getSession();
-        String local = (String) session.get("locale");
-        this.types = opportunityTypeService.getOptions(
-                OpportunityType.class.getSimpleName(), local);
-        this.currencies = currencyService.getAllObjects(Currency.class
-                .getSimpleName());
-        this.salesStages = salesStageService.getOptions(
-                SalesStage.class.getSimpleName(), local);
-        this.sources = leadSourceService.getOptions(
-                LeadSource.class.getSimpleName(), local);
     }
 
     /**
@@ -168,66 +170,6 @@ public class EditOpportunityAction extends BaseEditAction implements Preparable 
     }
 
     /**
-     * @return the accountService
-     */
-    public IBaseService<Account> getAccountService() {
-        return accountService;
-    }
-
-    /**
-     * @param accountService
-     *            the accountService to set
-     */
-    public void setAccountService(IBaseService<Account> accountService) {
-        this.accountService = accountService;
-    }
-
-    /**
-     * @return the currencyService
-     */
-    public IBaseService<Currency> getCurrencyService() {
-        return currencyService;
-    }
-
-    /**
-     * @param currencyService
-     *            the currencyService to set
-     */
-    public void setCurrencyService(IBaseService<Currency> currencyService) {
-        this.currencyService = currencyService;
-    }
-
-    /**
-     * @return the campaignService
-     */
-    public IBaseService<Campaign> getCampaignService() {
-        return campaignService;
-    }
-
-    /**
-     * @param campaignService
-     *            the campaignService to set
-     */
-    public void setCampaignService(IBaseService<Campaign> campaignService) {
-        this.campaignService = campaignService;
-    }
-
-    /**
-     * @return the userService
-     */
-    public IBaseService<User> getUserService() {
-        return userService;
-    }
-
-    /**
-     * @param userService
-     *            the userService to set
-     */
-    public void setUserService(IBaseService<User> userService) {
-        this.userService = userService;
-    }
-
-    /**
      * @return the opportunity
      */
     public Opportunity getOpportunity() {
@@ -240,66 +182,6 @@ public class EditOpportunityAction extends BaseEditAction implements Preparable 
      */
     public void setOpportunity(Opportunity opportunity) {
         this.opportunity = opportunity;
-    }
-
-    /**
-     * @return the types
-     */
-    public List<OpportunityType> getTypes() {
-        return types;
-    }
-
-    /**
-     * @param types
-     *            the types to set
-     */
-    public void setTypes(List<OpportunityType> types) {
-        this.types = types;
-    }
-
-    /**
-     * @return the currencies
-     */
-    public List<Currency> getCurrencies() {
-        return currencies;
-    }
-
-    /**
-     * @param currencies
-     *            the currencies to set
-     */
-    public void setCurrencies(List<Currency> currencies) {
-        this.currencies = currencies;
-    }
-
-    /**
-     * @return the salesStages
-     */
-    public List<SalesStage> getSalesStages() {
-        return salesStages;
-    }
-
-    /**
-     * @param salesStages
-     *            the salesStages to set
-     */
-    public void setSalesStages(List<SalesStage> salesStages) {
-        this.salesStages = salesStages;
-    }
-
-    /**
-     * @return the sources
-     */
-    public List<LeadSource> getSources() {
-        return sources;
-    }
-
-    /**
-     * @param sources
-     *            the sources to set
-     */
-    public void setSources(List<LeadSource> sources) {
-        this.sources = sources;
     }
 
     /**
@@ -408,36 +290,6 @@ public class EditOpportunityAction extends BaseEditAction implements Preparable 
     }
 
     /**
-     * @return the contactService
-     */
-    public IBaseService<Contact> getContactService() {
-        return contactService;
-    }
-
-    /**
-     * @param contactService
-     *            the contactService to set
-     */
-    public void setContactService(IBaseService<Contact> contactService) {
-        this.contactService = contactService;
-    }
-
-    /**
-     * @return the documentService
-     */
-    public IBaseService<Document> getDocumentService() {
-        return documentService;
-    }
-
-    /**
-     * @param documentService
-     *            the documentService to set
-     */
-    public void setDocumentService(IBaseService<Document> documentService) {
-        this.documentService = documentService;
-    }
-
-    /**
      * @return the accountText
      */
     public String getAccountText() {
@@ -449,54 +301,6 @@ public class EditOpportunityAction extends BaseEditAction implements Preparable 
      */
     public String getCampaignText() {
         return campaignText;
-    }
-
-    /**
-     * @return the opportunityTypeService
-     */
-    public IOptionService<OpportunityType> getOpportunityTypeService() {
-        return opportunityTypeService;
-    }
-
-    /**
-     * @param opportunityTypeService
-     *            the opportunityTypeService to set
-     */
-    public void setOpportunityTypeService(
-            IOptionService<OpportunityType> opportunityTypeService) {
-        this.opportunityTypeService = opportunityTypeService;
-    }
-
-    /**
-     * @return the salesStageService
-     */
-    public IOptionService<SalesStage> getSalesStageService() {
-        return salesStageService;
-    }
-
-    /**
-     * @param salesStageService
-     *            the salesStageService to set
-     */
-    public void setSalesStageService(
-            IOptionService<SalesStage> salesStageService) {
-        this.salesStageService = salesStageService;
-    }
-
-    /**
-     * @return the leadSourceService
-     */
-    public IOptionService<LeadSource> getLeadSourceService() {
-        return leadSourceService;
-    }
-
-    /**
-     * @param leadSourceService
-     *            the leadSourceService to set
-     */
-    public void setLeadSourceService(
-            IOptionService<LeadSource> leadSourceService) {
-        this.leadSourceService = leadSourceService;
     }
 
     /**
@@ -573,6 +377,81 @@ public class EditOpportunityAction extends BaseEditAction implements Preparable 
      */
     public void setCurrencyText(String currencyText) {
         this.currencyText = currencyText;
+    }
+
+    /**
+     * @return the taskService
+     */
+    public IBaseService<Task> getTaskService() {
+        return taskService;
+    }
+
+    /**
+     * @param taskService
+     *            the taskService to set
+     */
+    public void setTaskService(IBaseService<Task> taskService) {
+        this.taskService = taskService;
+    }
+
+    /**
+     * @return the contacts
+     */
+    public Iterator<Contact> getContacts() {
+        return contacts;
+    }
+
+    /**
+     * @param contacts
+     *            the contacts to set
+     */
+    public void setContacts(Iterator<Contact> contacts) {
+        this.contacts = contacts;
+    }
+
+    /**
+     * @return the leads
+     */
+    public Iterator<Lead> getLeads() {
+        return leads;
+    }
+
+    /**
+     * @param leads
+     *            the leads to set
+     */
+    public void setLeads(Iterator<Lead> leads) {
+        this.leads = leads;
+    }
+
+    /**
+     * @return the documents
+     */
+    public Iterator<Document> getDocuments() {
+        return documents;
+    }
+
+    /**
+     * @param documents
+     *            the documents to set
+     */
+    public void setDocuments(Iterator<Document> documents) {
+        this.documents = documents;
+    }
+
+    /**
+     * @return the tasks
+     */
+    public Iterator<Task> getTasks() {
+        return tasks;
+    }
+
+    /**
+     * @param tasks
+     *            the tasks to set
+     */
+    public void setTasks(Iterator<Task> tasks) {
+        this.tasks = tasks;
     }
 
 }

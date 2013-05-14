@@ -75,7 +75,7 @@ public class ListDocumentAction extends BaseListAction {
         if (scope == Role.OWNER_OR_DISABLED) {
             hqlBuilder.append(" where owner = ").append(loginUser.getId());
         }
-        hqlBuilder.append(" order by created_on");
+        hqlBuilder.append(" order by created_on desc");
         List<Document> result = baseService.findByHQL(hqlBuilder.toString());
         documents = result.iterator();
         return SUCCESS;

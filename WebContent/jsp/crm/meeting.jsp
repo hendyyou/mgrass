@@ -67,9 +67,9 @@
 	     <h3 class="ui-disabled" style="margin:0 inherit"><s:text name="entity.reminder_option_email_name.label"/>:</h3>
 	     <h3 style="margin-top:0"><s:property value="reminderOptionEmailLabel"/></h3>
 	   </li>
-       <li>
-	     <h3 class="ui-disabled" style="margin:0 inherit"><s:text name="meeting.location.label"/>:</h3>
-	     <h3 style="margin-top:0"><s:property value="meeting.location"/></h3>
+       <li data-icon="search">
+	     <a href="map.jsp?place=<s:property value="meeting.location"/>" data-ajax="false"><h3 class="ui-disabled" style="margin:0 inherit"><s:text name="meeting.location.label"/>:</h3>
+	     <h3 style="margin-top:0"><s:property value="meeting.location"/></h3></a>
 	   </li>
        <li>
 	     <h3 class="ui-disabled" style="margin:0 inherit"><s:text name="entity.assigned_to.label"/>:</h3>

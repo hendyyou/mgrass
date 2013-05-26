@@ -53,7 +53,7 @@
 </form>
 
 	<script type="text/javascript">	
-		$(document).ready(function() {
+	    $('#page1').live('pageinit', function() {
 			$(".logininput").blur(function() {
 				if ($(this).val() == "") {
 					$(this).css("border-color", "red");
@@ -70,9 +70,12 @@
 			locale=URLParams["request_locale"];
 			if (locale != null && locale == "zh_CN"){
 				$("#j_language").val("zh_CN");
+				$("#j_language option[value='zh_CN']").attr('selected', 'selected');
 			} else {
 				$("#j_language").val("en_US");
+				$("#j_language option[value='en_US']").attr('selected', 'selected');
 			}
+			$("#j_language").selectmenu('refresh', true);
 		});
 
 		function keypressTab(){

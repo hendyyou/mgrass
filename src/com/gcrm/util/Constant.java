@@ -34,7 +34,7 @@ public class Constant {
     public static final String DATA_TYPE_DATETIME = "DateTime";
 
     public static final String NAVIGATION_HISTORY = "navigation";
-    public static final String APP_PATH = "/grass/";
+    public static final String APP_PATH = "/grass";
     public static final String CRM_NAMESPACE = "/jsp/crm/";
     public static final String SYSTEM_NAMESPACE = "/jsp/system/";
     public static final int NAVIGATION_HISTORY_COUNT = 10;

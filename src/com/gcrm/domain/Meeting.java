@@ -18,22 +18,13 @@ public class Meeting extends BaseEntity implements Serializable {
     private String location;
     private boolean reminder_email;
     private ReminderOption reminder_option_email;
+    private EmailTemplate reminder_template;
     private String description;
     private String notes;
     private User assigned_to;
     private Set<Lead> leads = new HashSet<Lead>(0);
     private Set<User> users = new HashSet<User>(0);
     private Set<Contact> contacts = new HashSet<Contact>(0);
-
-    public Meeting() {
-        super();
-    }
-
-    public Meeting(Integer id, String subject) {
-        super();
-        this.setId(id);
-        this.subject = subject;
-    }
 
     @Override
     public Meeting clone() {
@@ -281,6 +272,21 @@ public class Meeting extends BaseEntity implements Serializable {
     @Override
     public String getName() {
         return this.subject;
+    }
+
+    /**
+     * @return the reminder_template
+     */
+    public EmailTemplate getReminder_template() {
+        return reminder_template;
+    }
+
+    /**
+     * @param reminder_template
+     *            the reminder_template to set
+     */
+    public void setReminder_template(EmailTemplate reminder_template) {
+        this.reminder_template = reminder_template;
     }
 
 }

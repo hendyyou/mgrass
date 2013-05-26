@@ -17,7 +17,9 @@
   <property name="location" column="location" type="string" />    
   <property name="reminder_email" column="reminder_email" type="boolean" />
   <many-to-one name="reminder_option_email"
-			class="ReminderOption" column="reminder_option_email" cascade="save-update" lazy="false"/>  
+			class="ReminderOption" column="reminder_option_email" cascade="save-update" lazy="false"/>
+  <many-to-one name="reminder_template"
+			class="EmailTemplate" column="reminder_template" cascade="save-update" lazy="false"/>  			  
   <property name="description" column="description" type="string" />  
   <property name="notes" column="notes" type="string" />    
   <many-to-one name="owner"

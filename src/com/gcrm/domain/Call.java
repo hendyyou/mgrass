@@ -25,6 +25,16 @@ public class Call extends BaseEntity implements Serializable {
     private Set<User> users = new HashSet<User>(0);
     private Set<Contact> contacts = new HashSet<Contact>(0);
 
+    public Call() {
+        super();
+    }
+
+    public Call(Integer id, String subject) {
+        super();
+        this.setId(id);
+        this.subject = subject;
+    }
+
     @Override
     public Call clone() {
         Call o = null;

@@ -26,6 +26,16 @@ public class Meeting extends BaseEntity implements Serializable {
     private Set<User> users = new HashSet<User>(0);
     private Set<Contact> contacts = new HashSet<Contact>(0);
 
+    public Meeting() {
+        super();
+    }
+
+    public Meeting(Integer id, String subject) {
+        super();
+        this.setId(id);
+        this.subject = subject;
+    }
+
     @Override
     public Meeting clone() {
         Meeting o = null;
